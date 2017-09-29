@@ -19,12 +19,13 @@ void printbit(unsigned char *_p){
 }
 
 int main(int argc,char **argv){
-	float x=-3.14159;	// -3.14159 = 0xc0490fd0
+	//float x=-3.14159;	// -3.14159 = 0xc0490fd0
+	float x=-12.3456;	// -12.3456 = 0xC1458794
 	unsigned char *p;
 	int i;
 
 	p=(unsigned char *)&x;
-	printf("%d\n",x);
+	printf("%f\n",x);
 	printf("%02x %02x %02x %02x\n",*p,*(p+1),*(p+2),*(p+3));
 	for(i=0;i<4;i++){
 		printbit(p+i);
