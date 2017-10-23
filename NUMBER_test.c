@@ -1,76 +1,11 @@
 #include<stdio.h>
 #include<time.h>
 #include<stdlib.h>
-
-#define KETA 30
-
-struct NUMBER{
-	int n[KETA];	//各桁の値
-	int sign;			//符号変数
-};
-
-void dispNumber(struct NUMBER *a){
-	int i;
-
-	if(a->sign==1){
-		printf(" +");
-	}
-	else if(a->sign==-1){
-		printf(" -");
-	}
-
-	for(i=KETA-1;i>=0;i--){
-		printf("%2d",a->n[i]);
-	}
-}
-
-void dispNumberZeroSuppress(struct NUMBER *a){
-	int i=KETA-1;
-
-	if(a->sign==1){
-		printf(" +");
-	}
-	else if(a->sign==-1){
-		printf(" -");
-	}
-
-	while(!a->n[i]&&i>0){
-		i--;
-	}
-
-	for(;i>=0;i--){
-		printf("%2d",a->n[i]);
-	}
-}
-
-void clearByZero(struct NUMBER *a){
-	int i;
-
-	for(i=0;i<KETA;i++){
-		a->n[i]=0;
-	}
-
-	a->sign=1;
-}
-
-void setRnd(struct NUMBER *a,int k){
-	int i;
-
-	clearByZero(a);
-
-	for(i=0;i<k;i++){
-		a->n[i]=random()%10;
-	}
-
-	if(random()%2){
-		a->sign=1;
-	}else{
-		a->sign=-1;
-	}
-}
+#include"mulcal.h"
 
 int main(){
 	struct NUMBER b,c,d;
+	int buf,i;
 
 	srandom(time(NULL));
 	clearByZero(&b);
@@ -79,7 +14,7 @@ int main(){
 
 	printf("b = ");
 	dispNumberZeroSuppress(&b);
-	putchar('\n');
+	printf(",isZero==%d\n",isZero(&b));
 	printf("c = ");
 	dispNumber(&c);
 	putchar('\n');
@@ -121,16 +56,34 @@ int main(){
 
 	setRnd(&b,5);
 	setRnd(&c,10);
-	setRnd(&d,15);
+	getAbs(&c,&d);
 
 	printf("b = ");
 	dispNumberZeroSuppress(&b);
-	putchar('\n');
+	printf(",isZero==%d\n",isZero(&b));
 	printf("c = ");
-	dispNumberZeroSuppress(&c);
+	dispNumber(&c);
 	putchar('\n');
+	while(1){
+		buf=mulBy10(&c,&d);
+		copyNumber(&d,&c);
+		printf("c = ");
+		dispNumber(&c);
+		printf(",overflow==%d\n",buf);
+		if(buf){
+			break;
+		}
+	}
 	printf("d = ");
-	dispNumberZeroSuppress(&d);
+	dispNumber(&d);
+	putchar('\n');
+	for(i=0;i<20;i++){
+		buf=divBy10(&c,&d);
+		copyNumber(&d,&c);
+		printf("d = ");
+		dispNumber(&c);
+		printf(",division==%d\n",buf);
+	}
 	putchar('\n');
 
 	return 0;
