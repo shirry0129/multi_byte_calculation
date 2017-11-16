@@ -170,23 +170,43 @@ int getInt(struct NUMBER *a,int *x){
 }
 
 void diff(struct NUMBER *a,int x){
-	int i;
+	int i,_x;
 	struct NUMBER buf;
 
+	_x=x;
 	getAbs(a,&buf);
-	if(x<0){
-		x*=-1;
+	if(_x<0){
+		_x*=-1;
 	}
 
 	for(i=0;i<KETA;i++){
-		if(a->n[i]!=x%10){
-			printf("mismatched.\n");
+		if(buf.n[i]!=_x%10){
+			printf("mismatched number.\n");
 			printf("NUMBER = ");
 			dispNumber(a);
 			printf(", x = %20d\n",x);
 			return;
 		}
-		x-=x%10;
-		x/=10;
+		_x-=_x%10;
+		_x/=10;
+	}
+
+	if(a->sign==-1){
+		if(!(x<0)){
+			printf("mismatched sign.\n");
+			printf("NUMBER = ");
+			dispNumber(a);
+			printf(", x = %20d\n",x);
+			return;
+		}
+	}
+	if(a->sign==1){
+		if(x<0){
+			printf("mismatched sign.\n");
+			printf("NUMBER = ");
+			dispNumber(a);
+			printf(", x = %020d\n",x);
+			return;
+		}
 	}
 }

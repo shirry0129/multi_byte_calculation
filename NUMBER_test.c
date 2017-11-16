@@ -55,8 +55,8 @@ int main(){
 	printf(", r = %d\n",r);
 
 	putchar('\n');
-	for(i=0;i<10;i++){
-		x=random()-RAND_MAX;
+	for(i=0;i<10e6;i++){
+		x=random()-RAND_MAX/2;
 		setInt(&f,x);
 		diff(&f,x);
 	}
