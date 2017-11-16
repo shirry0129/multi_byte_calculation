@@ -4,7 +4,7 @@
 #include"mulcal.h"
 
 int main(){
-	struct NUMBER a,b,c,d,e,f;
+	struct NUMBER a,b,c,d,e,f,g;
 	int r,x,y,i;
 
 	srandom(time(NULL));
@@ -54,16 +54,31 @@ int main(){
 	dispNumber(&f);
 	printf(", r = %d\n",r);
 
-	putchar('\n');
+	/*putchar('\n');
 	for(i=0;i<10e6;i++){
 		x=random()-RAND_MAX/2;
 		setInt(&f,x);
 		diff(&f,x);
-	}
+	}*/
 
-	// putchar('\n');
-	// r = getInt(&f,&y);
-	// printf("x = %d, y = %d, r = %d\n",x,y,r);
+	putchar('\n');
+	setRnd(&f,10);
+	printf("f = ");
+	dispNumber(&f);
+	putchar('\n');
+	setSign(&f,1);
+	printf("f = ");
+	dispNumber(&f);
+
+	putchar('\n');
+	setRnd(&g,10);
+	printf("g = ");
+	dispNumber(&g);
+	printf(", sign = %d\n",getSign(&g));
+
+	putchar('\n');
+	r = getInt(&f,&y);
+	printf("x = %d, y = %d, r = %d\n",x,y,r);
 
 	return 0;
 }

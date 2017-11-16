@@ -1,14 +1,15 @@
 #include"mulcal.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<limits.h>
 
 void dispNumber(const struct NUMBER *a){
     int i;
 
-	if(a->sign==1){
+	if(getSign(a)==1){
 		printf(" +");
 	}
-	if(a->sign==-1){
+	if(getSign(a)==-1){
 		printf(" -");
 	}
 
@@ -20,10 +21,10 @@ void dispNumber(const struct NUMBER *a){
 void dispNumberZeroSuppress(struct NUMBER *a){
 	int i=KETA-1;
 
-	if(a->sign==1){
+	if(getSign(a)==1){
 		printf(" +");
 	}
-	else if(a->sign==-1){
+	if(getSign(a)==-1){
 		printf(" -");
 	}
 
@@ -43,7 +44,7 @@ void clearByZero(struct NUMBER *a){
 		a->n[i]=0;
 	}
 
-	a->sign=1;
+	setSign(a,1);
 }
 
 void setRnd(struct NUMBER *a,int k){
@@ -62,9 +63,9 @@ void setRnd(struct NUMBER *a,int k){
 	}
 
 	if(random()%2){
-		a->sign=1;
+		setSign(a,1);
 	}else{
-		a->sign=-1;
+		setSign(a,-1);
 	}
 }
 
@@ -75,12 +76,12 @@ void copyNumber(struct NUMBER *a,struct NUMBER *b){
 		b->n[i]=a->n[i];
 	}
 
-	b->sign=a->sign;
+	setSign(b,getSign(a));
 }
 
 void getAbs(struct NUMBER *a,struct NUMBER *b){
 	copyNumber(a,b);
-	b->sign=1;
+	setSign(b,1);
 }
 
 int isZero(const struct NUMBER *a){
@@ -103,7 +104,7 @@ int mulBy10(struct NUMBER *a,struct NUMBER *b){
 		ret=-1;
 	}
 
-	b->sign=a->sign;
+	setSign(b,getSign(a));
 
 	for(i=0;i<KETA-1;i++){
 		b->n[i+1]=a->n[i];
@@ -117,14 +118,14 @@ int divBy10(struct NUMBER *a,struct NUMBER *b){
 	int ret;
 	int i;
 
-	if(a->sign==1){
+	if(getSign(a)==1){
 		ret=a->n[0];
 	}
-	else if(a->sign==-1){
+	if(getSign(a)==-1){
 		ret=-a->n[0];
 	}
 
-	b->sign=a->sign;
+	setSign(b,getSign(a));
 
 	for(i=1;i<KETA;i++){
 		b->n[i-1]=a->n[i];
@@ -146,16 +147,19 @@ int setInt(struct NUMBER *a,int x){
 	int i;
 
 	if(x<0){
-		a->sign=-1;
-		x*=-1;
+		setSign(a,-1);
+		for(i=0;i<KETA;i++){
+			a->n[i]=(x%10)*-1;
+			x-=x%10;
+			x/=10;
+		}
 	}else{
-		a->sign=1;
-	}
-
-	for(i=0;i<KETA;i++){
-		a->n[i]=x%10;
-		x-=x%10;
-		x/=10;
+		setSign(a,1);
+		for(i=0;i<KETA;i++){
+			a->n[i]=x%10;
+			x-=x%10;
+			x/=10;
+		}
 	}
 
 	if(x){
@@ -166,7 +170,27 @@ int setInt(struct NUMBER *a,int x){
 }
 
 int getInt(struct NUMBER *a,int *x){
+	int digits_decide=1;
+	int i;
+	struct NUMBER int_max,int_min;
 
+	setInt(&int_max,INT_MAX);
+	setInt(&int_min,INT_MIN);
+
+	
+}
+
+void setSign(struct NUMBER *a,int s){
+	if(!isZero(a)){
+		a->sign=1;
+		return;
+	}
+
+	a->sign=s;
+}
+
+int getSign(const struct NUMBER *a){
+	return a->sign;
 }
 
 void diff(struct NUMBER *a,int x){
@@ -191,7 +215,7 @@ void diff(struct NUMBER *a,int x){
 		_x/=10;
 	}
 
-	if(a->sign==-1){
+	if(getSign(a)==-1){
 		if(!(x<0)){
 			printf("mismatched sign.\n");
 			printf("NUMBER = ");
@@ -200,7 +224,7 @@ void diff(struct NUMBER *a,int x){
 			return;
 		}
 	}
-	if(a->sign==1){
+	if(getSign(a)==1){
 		if(x<0){
 			printf("mismatched sign.\n");
 			printf("NUMBER = ");

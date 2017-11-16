@@ -44,3 +44,9 @@ int getInt(struct NUMBER *a,int *x);
 
 //正誤判定
 void diff(struct NUMBER *a,int x);
+
+//符号設定
+void setSign(struct NUMBER *a,int s);
+
+//符号取得
+int getSign(const struct NUMBER *a);
