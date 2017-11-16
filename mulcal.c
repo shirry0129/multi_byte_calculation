@@ -2,13 +2,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void dispNumber(struct NUMBER *a){
+void dispNumber(const struct NUMBER *a){
     int i;
 
 	if(a->sign==1){
 		printf(" +");
 	}
-	else if(a->sign==-1){
+	if(a->sign==-1){
 		printf(" -");
 	}
 
@@ -47,11 +47,17 @@ void clearByZero(struct NUMBER *a){
 }
 
 void setRnd(struct NUMBER *a,int k){
-	int i;
+	int i,rimit;
 
 	clearByZero(a);
 
-	for(i=0;i<k;i++){
+	if(k>KETA){
+		rimit=KETA;
+	}else{
+		rimit=k;
+	}
+
+	for(i=0;i<rimit;i++){
 		a->n[i]=random()%10;
 	}
 
@@ -77,14 +83,11 @@ void getAbs(struct NUMBER *a,struct NUMBER *b){
 	b->sign=1;
 }
 
-int isZero(struct NUMBER *a){
-	struct NUMBER buf;
+int isZero(const struct NUMBER *a){
 	int i;
 
-	getAbs(a,&buf);
-
 	for(i=0;i<KETA;i++){
-		if(buf.n[i]){
+		if(a->n[i]){
 			return -1;
 		}
 	}
@@ -99,6 +102,8 @@ int mulBy10(struct NUMBER *a,struct NUMBER *b){
 	if(a->n[KETA-1]){
 		ret=-1;
 	}
+
+	b->sign=a->sign;
 
 	for(i=0;i<KETA-1;i++){
 		b->n[i+1]=a->n[i];
@@ -118,6 +123,8 @@ int divBy10(struct NUMBER *a,struct NUMBER *b){
 	else if(a->sign==-1){
 		ret=-a->n[0];
 	}
+
+	b->sign=a->sign;
 
 	for(i=1;i<KETA;i++){
 		b->n[i-1]=a->n[i];
@@ -160,4 +167,26 @@ int setInt(struct NUMBER *a,int x){
 
 int getInt(struct NUMBER *a,int *x){
 
+}
+
+void diff(struct NUMBER *a,int x){
+	int i;
+	struct NUMBER buf;
+
+	getAbs(a,&buf);
+	if(x<0){
+		x*=-1;
+	}
+
+	for(i=0;i<KETA;i++){
+		if(a->n[i]!=x%10){
+			printf("mismatched.\n");
+			printf("NUMBER = ");
+			dispNumber(a);
+			printf(", x = %20d\n",x);
+			return;
+		}
+		x-=x%10;
+		x/=10;
+	}
 }

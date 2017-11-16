@@ -5,7 +5,7 @@
 
 int main(){
 	struct NUMBER a,b,c,d,e,f;
-	int r,x,y;
+	int r,x,y,i;
 
 	srandom(time(NULL));
 
@@ -53,6 +53,13 @@ int main(){
 	printf("f = ");
 	dispNumber(&f);
 	printf(", r = %d\n",r);
+
+	putchar('\n');
+	for(i=0;i<10;i++){
+		x=random()-RAND_MAX;
+		setInt(&f,x);
+		diff(&f,x);
+	}
 
 	// putchar('\n');
 	// r = getInt(&f,&y);
