@@ -4,87 +4,58 @@
 #include"mulcal.h"
 
 int main(){
-	struct NUMBER b,c,d;
-	int buf,i;
+	struct NUMBER a,b,c,d,e,f;
+	int r,x,y;
 
 	srandom(time(NULL));
-	clearByZero(&b);
-	clearByZero(&c);
-	clearByZero(&d);
 
+	clearByZero(&a);
+	printf("a = ");
+	dispNumber(&a);
+	putchar('\n');
+
+	setRnd(&b,10);
 	printf("b = ");
-	dispNumberZeroSuppress(&b);
-	printf(",isZero==%d\n",isZero(&b));
+	dispNumber(&b);
+	putchar('\n');
+
+	copyNumber(&b,&c);
 	printf("c = ");
 	dispNumber(&c);
 	putchar('\n');
-	printf("d = ");
+
+	r = mulBy10(&b,&d);
+	printf("b * 10 = ");
 	dispNumber(&d);
-	putchar('\n');
+	printf(", r = %d\n",r);
 
-	/*
-	b.n[0]=9;
-	b.n[1]=1;
-	b.n[2]=0;
-	b.n[3]=1;
-	b.sign=1;
+	r = divBy10(&c,&e);
+	printf("c / 10 = ");
+	dispNumber(&e);
+	printf(", r = %d\n",r);
 
-	c.n[0]=3;
-	c.n[1]=0;
-	c.n[2]=1;
-	c.n[3]=5;
-	c.sign=-1;
+	printf("a == 0? --> %d\n",isZero(&a));
+	printf("b == 0? --> %d\n",isZero(&b));
+	printf("c == 0? --> %d\n",isZero(&c));
+	printf("d == 0? --> %d\n",isZero(&d));
+	printf("e == 0? --> %d\n",isZero(&e));
 
-	d.n[0]=5;
-	d.n[1]=9;
-	d.n[2]=2;
-	d.n[3]=5;
-	d.n[4]=7;
-	d.n[5]=2;
-	d.n[6]=4;
-	d.n[7]=7;
-	d.n[8]=0;
-	d.n[9]=0;
-	d.n[10]=7;
-	d.n[11]=8;
-	d.n[12]=2;
-	d.n[13]=3;
-	d.n[14]=3;
-	d.n[15]=4;
-	d.sign=1;
-	*/
-
-	setRnd(&b,5);
-	setRnd(&c,10);
-	getAbs(&c,&d);
-
+	swap(&a,&b);
+	printf("a = ");
+	dispNumber(&a);
 	printf("b = ");
-	dispNumberZeroSuppress(&b);
-	printf(",isZero==%d\n",isZero(&b));
-	printf("c = ");
-	dispNumber(&c);
+	dispNumber(&b);
+
 	putchar('\n');
-	while(1){
-		buf=mulBy10(&c,&d);
-		copyNumber(&d,&c);
-		printf("c = ");
-		dispNumber(&c);
-		printf(",overflow==%d\n",buf);
-		if(buf){
-			break;
-		}
-	}
-	printf("d = ");
-	dispNumber(&d);
+	x=1234567890;
+	r = setInt(&f,x);
+	printf("f = ");
+	dispNumber(&f);
+	printf(", r = %d\n",r);
+
 	putchar('\n');
-	for(i=0;i<20;i++){
-		buf=divBy10(&c,&d);
-		copyNumber(&d,&c);
-		printf("d = ");
-		dispNumber(&c);
-		printf(",division==%d\n",buf);
-	}
-	putchar('\n');
+	r = getInt(&f,&y);
+	printf("x = %d, y = %d, r = %d\n",x,y,r);
 
 	return 0;
 }

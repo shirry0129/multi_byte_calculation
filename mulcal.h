@@ -3,7 +3,7 @@
 struct NUMBER
 {
     int n[KETA];
-    int sign;
+    int sign;   //0<=:1,0>:-1
 };
 
 //表示
@@ -32,3 +32,15 @@ int mulBy10(struct NUMBER *a,struct NUMBER *b);
 
 // /10
 int divBy10(struct NUMBER *a,struct NUMBER *b);
+
+//aとbの交換
+void swap(struct NUMBER *a,struct NUMBER *b);
+
+//int型変数の設定
+int setInt(struct NUMBER *a,int x);
+
+//int型変数の取得
+int getInt(struct NUMBER *a,int *x);
+
+//正誤判定
+void diff(struct NUMBER *a,int x);
