@@ -136,6 +136,7 @@ void swap(struct NUMBER *a,struct NUMBER *b){
 
 int setInt(struct NUMBER *a,int x){
 	int ret=0;
+	int i;
 
 	if(x<0){
 		a->sign=-1;
@@ -144,9 +145,17 @@ int setInt(struct NUMBER *a,int x){
 		a->sign=1;
 	}
 
-	if(KETA<10){
+	for(i=0;i<KETA;i++){
+		a->n[i]=x%10;
+		x-=x%10;
+		x/=10;
+	}
+
+	if(x){
 		ret=-1;
 	}
+
+	return ret;
 }
 
 int getInt(struct NUMBER *a,int *x){

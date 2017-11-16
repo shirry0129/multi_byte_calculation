@@ -47,12 +47,12 @@ int main(){
 	printf("b = ");
 	dispNumber(&b);
 
-	// putchar('\n');
-	// x=1234567890;
-	// r = setInt(&f,x);
-	// printf("f = ");
-	// dispNumber(&f);
-	// printf(", r = %d\n",r);
+	putchar('\n');
+	x=-1234567890;
+	r = setInt(&f,x);
+	printf("f = ");
+	dispNumber(&f);
+	printf(", r = %d\n",r);
 
 	// putchar('\n');
 	// r = getInt(&f,&y);
