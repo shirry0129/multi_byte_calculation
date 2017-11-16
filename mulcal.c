@@ -129,9 +129,9 @@ int divBy10(struct NUMBER *a,struct NUMBER *b){
 
 void swap(struct NUMBER *a,struct NUMBER *b){
 	struct NUMBER c;
-	copyNumber(c,a);
-	copyNumber(a,b);
-	copyNumber(b,c);
+	copyNumber(a,&c);
+	copyNumber(b,a);
+	copyNumber(&c,b);
 }
 
 int setInt(struct NUMBER *a,int x){
@@ -147,4 +147,8 @@ int setInt(struct NUMBER *a,int x){
 	if(KETA<10){
 		ret=-1;
 	}
+}
+
+int getInt(struct NUMBER *a,int *x){
+
 }

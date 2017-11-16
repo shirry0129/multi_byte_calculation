@@ -43,19 +43,20 @@ int main(){
 	swap(&a,&b);
 	printf("a = ");
 	dispNumber(&a);
+	putchar('\n');
 	printf("b = ");
 	dispNumber(&b);
 
-	putchar('\n');
-	x=1234567890;
-	r = setInt(&f,x);
-	printf("f = ");
-	dispNumber(&f);
-	printf(", r = %d\n",r);
+	// putchar('\n');
+	// x=1234567890;
+	// r = setInt(&f,x);
+	// printf("f = ");
+	// dispNumber(&f);
+	// printf(", r = %d\n",r);
 
-	putchar('\n');
-	r = getInt(&f,&y);
-	printf("x = %d, y = %d, r = %d\n",x,y,r);
+	// putchar('\n');
+	// r = getInt(&f,&y);
+	// printf("x = %d, y = %d, r = %d\n",x,y,r);
 
 	return 0;
 }
