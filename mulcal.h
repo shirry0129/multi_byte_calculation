@@ -50,3 +50,9 @@ void setSign(struct NUMBER *a,int s);
 
 //符号取得
 int getSign(const struct NUMBER *a);
+
+//大小比較
+///0…a==b
+///1…a>b
+///-1…a<b
+int numComp(struct NUMBER *a,struct NUMBER *b);

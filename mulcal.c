@@ -193,6 +193,43 @@ int getSign(const struct NUMBER *a){
 	return a->sign;
 }
 
+int numComp(struct NUMBER *a,struct NUMBER *b){
+	int i;
+
+	if(getSign(a)>getSign(b)){
+		return 1;
+	}
+	if(getSign(a)<getSign(b)){
+		return -1;
+	}
+
+	if(getSign(a)==1&&getSign(b)==1){
+		for(i=KETA-1;i>=0;i--){
+			if(a->n[i]>b->n[i]){
+				return 1;
+			}
+			if(a->n[i]<b->n[i]){
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
+	if(getSign(a)==-1&&getSign(b)==-1){
+		for(i=KETA-1;i>=0;i--){
+			if(a->n[i]>b->n[i]){
+				return -1;
+			}
+			if(a->n[i]<b->n[i]){
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+}
+
 void diff(struct NUMBER *a,int x){
 	int i,_x;
 	struct NUMBER buf;
