@@ -171,7 +171,7 @@ int setInt(struct NUMBER *a,int x){
 
 int getInt(struct NUMBER *a,int *x){
 	int digits_decide=1;
-	int i,ret=0;
+	int i;
 	int limit=10;
 	struct NUMBER int_max,int_min;
 
@@ -179,7 +179,8 @@ int getInt(struct NUMBER *a,int *x){
 	setInt(&int_min,INT_MIN);
 
 	if(numComp(a,&int_max)==1||numComp(a,&int_min)==-1){
-		ret=-1;
+		*x=0;
+		return -1;
 	}
 
 	if(KETA<10){
@@ -194,10 +195,10 @@ int getInt(struct NUMBER *a,int *x){
 	}
 
 	if(a->sign==-1){
-		*x*=-1;
+		(*x)*=-1;
 	}
 
-	return ret;
+	return 0;
 }
 
 void setSign(struct NUMBER *a,int s){
