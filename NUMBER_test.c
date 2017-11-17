@@ -58,7 +58,7 @@ int main(){
 	for(i=0;i<10e6;i++){
 		x=random()-RAND_MAX/2;
 		setInt(&f,x);
-		diff(&f,x);
+		setInt_diff(&f,x);
 	}*/
 
 	putchar('\n');

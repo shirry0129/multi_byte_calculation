@@ -230,7 +230,7 @@ int numComp(struct NUMBER *a,struct NUMBER *b){
 	}
 }
 
-void diff(struct NUMBER *a,int x){
+void setInt_diff(struct NUMBER *a,int x){
 	int i,_x;
 	struct NUMBER buf;
 
@@ -269,5 +269,30 @@ void diff(struct NUMBER *a,int x){
 			printf(", x = %020d\n",x);
 			return;
 		}
+	}
+}
+
+void numComp_diff(int sl,int x,int y){
+	switch (sl){
+	case 1:
+		if(!(x>y)){
+			printf("mismatched.\n");
+			printf("x = %d, y = %d\n",x,y);
+		}
+		break;
+	case 0:
+		if(!(x==y)){
+			printf("mismatched.\n");
+			printf("x = %d, y = %d\n",x,y);
+		}
+		break;
+	case -1:
+		if(!(x<y)){
+			printf("mismatched.\n");
+			printf("x = %d, y = %d\n",x,y);
+		}
+		break;
+	default:
+		break;
 	}
 }
