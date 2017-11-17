@@ -46,59 +46,24 @@ int main(){
 	putchar('\n');
 	printf("b = ");
 	dispNumber(&b);
-
 	putchar('\n');
-	x=-1234567890;
-	r = setInt(&f,x);
-	printf("f = ");
-	dispNumber(&f);
-	printf(", r = %d\n",r);
 
-	/*putchar('\n');
-	for(i=0;i<10e6;i++){
-		x=random()-RAND_MAX/2;
-		setInt(&f,x);
-		setInt_diff(&f,x);
-	}*/
-
-	putchar('\n');
-	setRnd(&f,10);
-	printf("f = ");
-	dispNumber(&f);
-	putchar('\n');
-	setSign(&f,1);
-	printf("f = ");
-	dispNumber(&f);
-
-	putchar('\n');
-	setRnd(&g,10);
-	printf("g = ");
-	dispNumber(&g);
-	printf(", sign = %d\n",getSign(&g));
-
-	putchar('\n');
-	x=random()-RAND_MAX/2;
-	y=random()-RAND_MAX/2;
-	setInt(&a,x);
-	setInt(&b,y);
+	setInt(&a,-12345);
 	printf("a = ");
 	dispNumber(&a);
-	printf(", b = ");
+	putchar('\n');
+
+	copyNumber(&a,&b);
+	setSign(&b,1);
+	printf("b = ");
 	dispNumber(&b);
-	printf("\nnumComp() = %d\n",numComp(&a,&b));
-
 	putchar('\n');
-	for(i=0;i<10e6;i++){
-		x=random()-RAND_MAX/2;
-		y=random()-RAND_MAX/2;
-		setInt(&a,x);
-		setInt(&b,y);
-		numComp_diff(numComp(&a,&b),x,y);
-	}
 
-	putchar('\n');
-	r = getInt(&f,&y);
-	printf("x = %d, y = %d, r = %d\n",x,y,r);
+	r=getSign(&b);
+	printf("getSign() = %d\n",r);
+
+	r=numComp(&a,&b);
+	printf("numComp() = %d\n",r);
 
 	return 0;
 }
