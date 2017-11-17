@@ -178,7 +178,7 @@ int getInt(struct NUMBER *a,int *x){
 	setInt(&int_max,INT_MAX);
 	setInt(&int_min,INT_MIN);
 
-	if(numComp(a,&INT_MAX)==1||numComp(a,&INT_MIN)==-1){
+	if(numComp(a,&int_max)==1||numComp(a,&int_min)==-1){
 		ret=-1;
 	}
 
@@ -191,6 +191,10 @@ int getInt(struct NUMBER *a,int *x){
 	for(i=0;i<limit;i++){
 		*x+=a->n[i]*digits_decide;
 		digits_decide*=10;
+	}
+
+	if(a->sign==-1){
+		*x*=-1;
 	}
 
 	return ret;
