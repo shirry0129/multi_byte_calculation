@@ -77,6 +77,26 @@ int main(){
 	printf(", sign = %d\n",getSign(&g));
 
 	putchar('\n');
+	x=random()-RAND_MAX/2;
+	y=random()-RAND_MAX/2;
+	setInt(&a,x);
+	setInt(&b,y);
+	printf("a = ");
+	dispNumber(&a);
+	printf(", b = ");
+	dispNumber(&b);
+	printf("\nnumComp() = %d\n",numComp(&a,&b));
+
+	putchar('\n');
+	for(i=0;i<10e6;i++){
+		x=random()-RAND_MAX/2;
+		y=random()-RAND_MAX/2;
+		setInt(&a,x);
+		setInt(&b,y);
+		numComp_diff(numComp(&a,&b),x,y);
+	}
+
+	putchar('\n');
 	r = getInt(&f,&y);
 	printf("x = %d, y = %d, r = %d\n",x,y,r);
 
