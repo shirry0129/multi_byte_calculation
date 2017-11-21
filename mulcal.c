@@ -317,3 +317,16 @@ void numComp_diff(int sl,int x,int y){
 		break;
 	}
 }
+
+void add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
+	int i;
+	int e=0,buf;
+
+	clearByZero(c);
+	
+	for(i=0;i<KETA;i++){
+		buf=a->n[i]+b->n[i]+e;
+		c->n[i]=buf%10;
+		e=buf/10;
+	}
+}

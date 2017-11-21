@@ -59,3 +59,6 @@ int numComp(struct NUMBER *a,struct NUMBER *b);
 
 //numComp正誤判定
 void numComp_diff(int sl,int x,int y);
+
+//加算
+void add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
