@@ -331,7 +331,7 @@ int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 		e=buf/10;
 	}
 
-	if(!e){
+	if(e){
 		ret=-1;
 	}
 
