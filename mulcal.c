@@ -271,10 +271,73 @@ int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	return ret;
 }
 
-void diff(){
+int sub(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	int i;
+	int h=0,buf;
+	int ret=0;
 
-	for(i=0;i<10e6;i++){
-		
+	clearByZero(c);
+	
+	if(numComp(a,b)==1){
+		for(i=0;i<KETA;i++){
+			if(a->n[i]-h<b->n[i]){
+				buf=10+a->n[i]-h-b->n[i];
+				h=1;
+			}else{
+				buf=a->n[i]-h-b->n[i];
+				h=0;
+			}
+			c->n[i]=buf;
+		}
+	}
+	if(numComp(a,b)==-1){
+		for(i=0;i<KETA;i++){
+			if(b->n[i]-h<a->n[i]){
+				buf=10+b->n[i]-h-a->n[i];
+				h=1;
+			}else{
+				buf=b->n[i]-h-a->n[i];
+				h=0;
+			}
+			c->n[i]=buf;
+		}
+		setSign(c,-1);
+	}
+
+
+	if(h){
+		ret=-1;
+	}
+
+	return ret;
+}
+
+void diff(int count){
+	int i;
+	int x,y,z;
+	struct NUMBER a,b,c;
+
+	clearByZero(&a);
+	clearByZero(&b);
+	clearByZero(&c);
+
+	for(i=0;i<count;i++){
+		x=random()/10;
+		y=random()/10;
+		setInt(&a,x);
+		setInt(&b,y);
+		add(&a,&b,&c);
+		getInt(&c,&z);
+		if(x+y!=z){
+			printf("mismatched.\n");
+			printf("x = %d,y = %d,x + y = %d\n",x,y,x+y);
+			printf("a = ");
+			dispNumber(&a);
+			printf("\nb = ");
+			dispNumber(&b);
+			printf("\na + b =");
+			dispNumber(&c);
+			putchar('\n');
+		}
 	}
 }

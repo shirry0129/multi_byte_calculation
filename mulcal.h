@@ -57,5 +57,8 @@ int numComp(struct NUMBER *a,struct NUMBER *b);
 //加算
 int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
 
+//減算
+int sub(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
+
 //正誤判定
-void diff();
+void diff(int count);
