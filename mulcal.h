@@ -1,4 +1,4 @@
-#define KETA 20
+#define KETA 4
 
 struct NUMBER
 {
@@ -61,4 +61,4 @@ int numComp(struct NUMBER *a,struct NUMBER *b);
 void numComp_diff(int sl,int x,int y);
 
 //加算
-void add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
+int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);

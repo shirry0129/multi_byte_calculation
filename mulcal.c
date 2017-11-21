@@ -318,9 +318,10 @@ void numComp_diff(int sl,int x,int y){
 	}
 }
 
-void add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
+int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int e=0,buf;
+	int ret=0;
 
 	clearByZero(c);
 	
@@ -329,4 +330,10 @@ void add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 		c->n[i]=buf%10;
 		e=buf/10;
 	}
+
+	if(!e){
+		ret=-1;
+	}
+
+	return ret;
 }
