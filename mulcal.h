@@ -1,4 +1,4 @@
-#define KETA 4
+#define KETA 20
 
 struct NUMBER
 {
@@ -42,9 +42,6 @@ int setInt(struct NUMBER *a,int x);
 //int型変数の取得
 int getInt(struct NUMBER *a,int *x);
 
-//setInt正誤判定
-void setInt_diff(struct NUMBER *a,int x);
-
 //符号設定
 void setSign(struct NUMBER *a,int s);
 
@@ -57,8 +54,8 @@ int getSign(const struct NUMBER *a);
 ///-1…a<b
 int numComp(struct NUMBER *a,struct NUMBER *b);
 
-//numComp正誤判定
-void numComp_diff(int sl,int x,int y);
-
 //加算
 int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
+
+//正誤判定
+void diff();

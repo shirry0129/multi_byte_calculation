@@ -251,73 +251,6 @@ int numComp(struct NUMBER *a,struct NUMBER *b){
 	}
 }
 
-void setInt_diff(struct NUMBER *a,int x){
-	int i,_x;
-	struct NUMBER buf;
-
-	_x=x;
-	getAbs(a,&buf);
-	if(_x<0){
-		_x*=-1;
-	}
-
-	for(i=0;i<KETA;i++){
-		if(buf.n[i]!=_x%10){
-			printf("mismatched number.\n");
-			printf("NUMBER = ");
-			dispNumber(a);
-			printf(", x = %20d\n",x);
-			return;
-		}
-		_x-=_x%10;
-		_x/=10;
-	}
-
-	if(getSign(a)==-1){
-		if(!(x<0)){
-			printf("mismatched sign.\n");
-			printf("NUMBER = ");
-			dispNumber(a);
-			printf(", x = %20d\n",x);
-			return;
-		}
-	}
-	if(getSign(a)==1){
-		if(x<0){
-			printf("mismatched sign.\n");
-			printf("NUMBER = ");
-			dispNumber(a);
-			printf(", x = %020d\n",x);
-			return;
-		}
-	}
-}
-
-void numComp_diff(int sl,int x,int y){
-	switch (sl){
-	case 1:
-		if(!(x>y)){
-			printf("mismatched.\n");
-			printf("x = %d, y = %d\n",x,y);
-		}
-		break;
-	case 0:
-		if(!(x==y)){
-			printf("mismatched.\n");
-			printf("x = %d, y = %d\n",x,y);
-		}
-		break;
-	case -1:
-		if(!(x<y)){
-			printf("mismatched.\n");
-			printf("x = %d, y = %d\n",x,y);
-		}
-		break;
-	default:
-		break;
-	}
-}
-
 int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int e=0,buf;
@@ -336,4 +269,12 @@ int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	}
 
 	return ret;
+}
+
+void diff(){
+	int i;
+
+	for(i=0;i<10e6;i++){
+		
+	}
 }
