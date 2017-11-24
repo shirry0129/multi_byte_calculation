@@ -331,6 +331,10 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 			ret=add(&Aabs,b,c);
 			setSign(c,-1);
 		}
+		if(getSign(b)==-1){
+			getAbs(b,&Babs);
+			ret=add(a,&Babs,c);
+		}
 	}
 
 	if(h){
