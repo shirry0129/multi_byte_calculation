@@ -142,28 +142,29 @@ void swap(struct NUMBER *a,struct NUMBER *b){
 	copyNumber(&c,b);
 }
 
-int setInt(struct NUMBER *a,const int x){
+int setInt(struct NUMBER *a,int x){
 	int ret=0;
 	int i;
-	int _x=x;
 
-	if(_x<0){
+	clearByZero(a);
+
+	if(x<0){
+		for(i=0;i<KETA;i++){
+			a->n[i]=(x%10)*-1;
+			x-=x%10;
+			x/=10;
+		}
 		setSign(a,-1);
-		for(i=0;i<KETA;i++){
-			a->n[i]=(_x%10)*-1;
-			_x-=_x%10;
-			_x/=10;
-		}
 	}else{
-		setSign(a,1);
 		for(i=0;i<KETA;i++){
-			a->n[i]=_x%10;
-			_x-=_x%10;
-			_x/=10;
+			a->n[i]=x%10;
+			x-=x%10;
+			x/=10;
 		}
+		setSign(a,1);
 	}
 
-	if(_x){
+	if(x){
 		ret=-1;
 	}
 
@@ -203,7 +204,7 @@ int getInt(const struct NUMBER *a,int *x){
 }
 
 void setSign(struct NUMBER *a,const int s){
-	if(!isZero(a)){
+	if(isZero(a)==0){
 		a->sign=1;
 		return;
 	}
@@ -256,7 +257,7 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int e=0,buf;
 	int ret=0;
-	struct NUMBER var;
+	struct NUMBER Aabs,Babs;
 
 	clearByZero(c);
 	
@@ -269,8 +270,20 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 			}
 		}
 		if(getSign(b)==-1){
-			getAbs(b,&var);
-			sub(a,&var,c);
+			getAbs(b,&Babs);
+			ret=sub(a,&Babs,c);
+		}
+	}
+	if(getSign(a)==-1){
+		if(getSign(b)==1){
+			getAbs(a,&Aabs);
+			ret=sub(b,&Aabs,c);
+		}
+		if(getSign(b)==-1){
+			getAbs(a,&Aabs);
+			getAbs(b,&Babs);
+			ret=add(&Aabs,&Babs,c);
+			setSign(c,-1);
 		}
 	}
 
@@ -300,7 +313,7 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 			c->n[i]=buf;
 		}
 	}else{
-		sub(b,a,c);
+		ret=sub(b,a,c);
 		setSign(c,-1);
 	}
 
@@ -321,20 +334,20 @@ void diff(int count){
 	clearByZero(&c);
 
 	for(i=0;i<count;i++){
-		x=random()/10;
-		y=random()/10;
+		x=RAND_MAX/2-random();
+		y=RAND_MAX/2-random();
 		setInt(&a,x);
 		setInt(&b,y);
-		sub(&a,&b,&c);
+		add(&a,&b,&c);
 		getInt(&c,&z);
-		if(x-y!=z){
-			printf("mismatched.\n");
-			printf("x = %d,y = %d,x - y = %d\n",x,y,x+y);
+		if(x+y!=z){
+			printf("mismatched.%d\n",i);
+			printf("x = %d,y = %d,x + y = %d\n",x,y,x+y);
 			printf("a = ");
 			dispNumber(&a);
 			printf("\nb = ");
 			dispNumber(&b);
-			printf("\na - b =");
+			printf("\na + b =");
 			dispNumber(&c);
 			putchar('\n');
 		}

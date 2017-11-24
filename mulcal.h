@@ -39,7 +39,7 @@ int divBy10(const struct NUMBER *a,struct NUMBER *b);
 void swap(struct NUMBER *a,struct NUMBER *b);
 
 //int型変数の設定
-int setInt(struct NUMBER *a,const int x);
+int setInt(struct NUMBER *a,int x);
 
 //int型変数の取得
 int getInt(const struct NUMBER *a,int *x);
