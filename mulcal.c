@@ -325,13 +325,13 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 			ret=add(a,&Babs,c);
 		}
 	}
-	// if(getSign(a)==-1){
-	// 	if(getSign(b)==1){
-	// 		getAbs(a,&Aabs);
-	// 		ret=add(&Aabs,b,c);
-	// 		setSign(c,-1);
-	// 	}
-	// }
+	if(getSign(a)==-1){
+		if(getSign(b)==1){
+			getAbs(a,&Aabs);
+			ret=add(&Aabs,b,c);
+			setSign(c,-1);
+		}
+	}
 
 	if(h){
 		ret=-1;
