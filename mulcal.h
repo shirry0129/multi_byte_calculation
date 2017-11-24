@@ -19,31 +19,33 @@ void clearByZero(struct NUMBER *a);
 void setRnd(struct NUMBER *a,int k);
 
 //コピー
-void copyNumber(struct NUMBER *a,struct NUMBER *b);
+//a → b
+void copyNumber(const struct NUMBER *a,struct NUMBER *b);
 
 //絶対値
-void getAbs(struct NUMBER *a,struct NUMBER *b);
+//aの絶対値をbに返す
+void getAbs(const struct NUMBER *a,struct NUMBER *b);
 
 //ゼロ判別
 int isZero(const struct NUMBER *a);
 
 //*10
-int mulBy10(struct NUMBER *a,struct NUMBER *b);
+int mulBy10(const struct NUMBER *a,struct NUMBER *b);
 
 // /10
-int divBy10(struct NUMBER *a,struct NUMBER *b);
+int divBy10(const struct NUMBER *a,struct NUMBER *b);
 
 //aとbの交換
 void swap(struct NUMBER *a,struct NUMBER *b);
 
 //int型変数の設定
-int setInt(struct NUMBER *a,int x);
+int setInt(struct NUMBER *a,const int x);
 
 //int型変数の取得
-int getInt(struct NUMBER *a,int *x);
+int getInt(const struct NUMBER *a,int *x);
 
 //符号設定
-void setSign(struct NUMBER *a,int s);
+void setSign(struct NUMBER *a,const int s);
 
 //符号取得
 int getSign(const struct NUMBER *a);
@@ -55,9 +57,11 @@ int getSign(const struct NUMBER *a);
 int numComp(const struct NUMBER *a,const struct NUMBER *b);
 
 //加算
+//a + b = c
 int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 
 //減算
+//a - b = c
 int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 
 //正誤判定

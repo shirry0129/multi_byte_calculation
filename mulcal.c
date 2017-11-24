@@ -69,7 +69,7 @@ void setRnd(struct NUMBER *a,int k){
 	}
 }
 
-void copyNumber(struct NUMBER *a,struct NUMBER *b){
+void copyNumber(const struct NUMBER *a,struct NUMBER *b){
 	int i;
 	
 	for(i=0;i<KETA;i++){
@@ -79,7 +79,7 @@ void copyNumber(struct NUMBER *a,struct NUMBER *b){
 	setSign(b,getSign(a));
 }
 
-void getAbs(struct NUMBER *a,struct NUMBER *b){
+void getAbs(const struct NUMBER *a,struct NUMBER *b){
 	copyNumber(a,b);
 	setSign(b,1);
 }
@@ -96,7 +96,7 @@ int isZero(const struct NUMBER *a){
 	return 0;
 }
 
-int mulBy10(struct NUMBER *a,struct NUMBER *b){
+int mulBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret=0;
 	int i;
 
@@ -114,7 +114,7 @@ int mulBy10(struct NUMBER *a,struct NUMBER *b){
 	return ret;
 }
 
-int divBy10(struct NUMBER *a,struct NUMBER *b){
+int divBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret;
 	int i;
 
@@ -142,34 +142,35 @@ void swap(struct NUMBER *a,struct NUMBER *b){
 	copyNumber(&c,b);
 }
 
-int setInt(struct NUMBER *a,int x){
+int setInt(struct NUMBER *a,const int x){
 	int ret=0;
 	int i;
+	int _x=x;
 
-	if(x<0){
+	if(_x<0){
 		setSign(a,-1);
 		for(i=0;i<KETA;i++){
-			a->n[i]=(x%10)*-1;
-			x-=x%10;
-			x/=10;
+			a->n[i]=(_x%10)*-1;
+			_x-=_x%10;
+			_x/=10;
 		}
 	}else{
 		setSign(a,1);
 		for(i=0;i<KETA;i++){
-			a->n[i]=x%10;
-			x-=x%10;
-			x/=10;
+			a->n[i]=_x%10;
+			_x-=_x%10;
+			_x/=10;
 		}
 	}
 
-	if(x){
+	if(_x){
 		ret=-1;
 	}
 
 	return ret;
 }
 
-int getInt(struct NUMBER *a,int *x){
+int getInt(const struct NUMBER *a,int *x){
 	int digits_decide=1;
 	int i;
 	int limit=10;
@@ -201,7 +202,7 @@ int getInt(struct NUMBER *a,int *x){
 	return 0;
 }
 
-void setSign(struct NUMBER *a,int s){
+void setSign(struct NUMBER *a,const int s){
 	if(!isZero(a)){
 		a->sign=1;
 		return;
@@ -255,13 +256,22 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int e=0,buf;
 	int ret=0;
+	struct NUMBER var;
 
 	clearByZero(c);
 	
-	for(i=0;i<KETA;i++){
-		buf=a->n[i]+b->n[i]+e;
-		c->n[i]=buf%10;
-		e=buf/10;
+	if(getSign(a)==1){
+		if(getSign(b)==1){
+			for(i=0;i<KETA;i++){
+				buf=a->n[i]+b->n[i]+e;
+				c->n[i]=buf%10;
+				e=buf/10;
+			}
+		}
+		if(getSign(b)==-1){
+			getAbs(b,&var);
+			sub(a,&var,c);
+		}
 	}
 
 	if(e){
@@ -278,7 +288,7 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 
 	clearByZero(c);
 
-	if(numComp(a,b)==(0||1)){
+	if(numComp(a,b)==0||numComp(a,b)==1){
 		for(i=0;i<KETA;i++){
 			if(a->n[i]-h<b->n[i]){
 				buf=10+a->n[i]-h-b->n[i];
