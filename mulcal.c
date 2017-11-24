@@ -298,24 +298,40 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int h=0,buf;
 	int ret=0;
+	struct NUMBER Aabs,Babs;
 
 	clearByZero(c);
 
-	if(numComp(a,b)==0||numComp(a,b)==1){
-		for(i=0;i<KETA;i++){
-			if(a->n[i]-h<b->n[i]){
-				buf=10+a->n[i]-h-b->n[i];
-				h=1;
+	if(getSign(a)==1){
+		if(getSign(b)==1){
+			if(numComp(a,b)==0||numComp(a,b)==1){
+				for(i=0;i<KETA;i++){
+					if(a->n[i]-h<b->n[i]){
+						buf=10+a->n[i]-h-b->n[i];
+						h=1;
+					}else{
+						buf=a->n[i]-h-b->n[i];
+						h=0;
+					}
+					c->n[i]=buf;
+				}
 			}else{
-				buf=a->n[i]-h-b->n[i];
-				h=0;
+				ret=sub(b,a,c);
+				setSign(c,-1);
 			}
-			c->n[i]=buf;
 		}
-	}else{
-		ret=sub(b,a,c);
-		setSign(c,-1);
+		if(getSign(b)==-1){
+			getAbs(b,&Babs);
+			ret=add(a,&Babs,c);
+		}
 	}
+	// if(getSign(a)==-1){
+	// 	if(getSign(b)==1){
+	// 		getAbs(a,&Aabs);
+	// 		ret=add(&Aabs,b,c);
+	// 		setSign(c,-1);
+	// 	}
+	// }
 
 	if(h){
 		ret=-1;
