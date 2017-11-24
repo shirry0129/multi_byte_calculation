@@ -52,13 +52,13 @@ int getSign(const struct NUMBER *a);
 ///0…a==b
 ///1…a>b
 ///-1…a<b
-int numComp(struct NUMBER *a,struct NUMBER *b);
+int numComp(const struct NUMBER *a,const struct NUMBER *b);
 
 //加算
-int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
+int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 
 //減算
-int sub(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c);
+int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 
 //正誤判定
 void diff(int count);

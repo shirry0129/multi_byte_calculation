@@ -214,7 +214,7 @@ int getSign(const struct NUMBER *a){
 	return a->sign;
 }
 
-int numComp(struct NUMBER *a,struct NUMBER *b){
+int numComp(const struct NUMBER *a,const struct NUMBER *b){
 	int i;
 
 	if(getSign(a)>getSign(b)){
@@ -251,7 +251,7 @@ int numComp(struct NUMBER *a,struct NUMBER *b){
 	}
 }
 
-int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
+int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int e=0,buf;
 	int ret=0;
@@ -271,14 +271,14 @@ int add(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 	return ret;
 }
 
-int sub(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
+int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	int i;
 	int h=0,buf;
 	int ret=0;
 
 	clearByZero(c);
-	
-	if(numComp(a,b)==1){
+
+	if(numComp(a,b)==(0||1)){
 		for(i=0;i<KETA;i++){
 			if(a->n[i]-h<b->n[i]){
 				buf=10+a->n[i]-h-b->n[i];
@@ -289,21 +289,10 @@ int sub(struct NUMBER *a,struct NUMBER *b,struct NUMBER *c){
 			}
 			c->n[i]=buf;
 		}
-	}
-	if(numComp(a,b)==-1){
-		for(i=0;i<KETA;i++){
-			if(b->n[i]-h<a->n[i]){
-				buf=10+b->n[i]-h-a->n[i];
-				h=1;
-			}else{
-				buf=b->n[i]-h-a->n[i];
-				h=0;
-			}
-			c->n[i]=buf;
-		}
+	}else{
+		sub(b,a,c);
 		setSign(c,-1);
 	}
-
 
 	if(h){
 		ret=-1;
@@ -326,16 +315,16 @@ void diff(int count){
 		y=random()/10;
 		setInt(&a,x);
 		setInt(&b,y);
-		add(&a,&b,&c);
+		sub(&a,&b,&c);
 		getInt(&c,&z);
-		if(x+y!=z){
+		if(x-y!=z){
 			printf("mismatched.\n");
-			printf("x = %d,y = %d,x + y = %d\n",x,y,x+y);
+			printf("x = %d,y = %d,x - y = %d\n",x,y,x+y);
 			printf("a = ");
 			dispNumber(&a);
 			printf("\nb = ");
 			dispNumber(&b);
-			printf("\na + b =");
+			printf("\na - b =");
 			dispNumber(&c);
 			putchar('\n');
 		}
