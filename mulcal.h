@@ -69,5 +69,9 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 //a + 1 = b
 int increment(const struct NUMBER *a,struct NUMBER *b);
 
+//デクリメント
+//a - 1 = b
+int decrement(const struct NUMBER *a,struct NUMBER *b);
+
 //正誤判定
 void diff(int count);

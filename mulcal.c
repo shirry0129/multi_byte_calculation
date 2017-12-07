@@ -354,6 +354,16 @@ int increment(const struct NUMBER *a,struct NUMBER *b){
 	return ret;
 }
 
+int decrement(const struct NUMBER *a,struct NUMBER *b){
+	struct NUMBER one;
+	int ret;
+
+	setInt(&one,1);
+	ret = sub(a,&one,b);
+
+	return ret;
+}
+
 void diff(int count){
 	int i;
 	int x,y,z;
