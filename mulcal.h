@@ -27,6 +27,7 @@ void copyNumber(const struct NUMBER *a,struct NUMBER *b);
 void getAbs(const struct NUMBER *a,struct NUMBER *b);
 
 //ゼロ判別
+//0なら0を返す
 int isZero(const struct NUMBER *a);
 
 //*10
@@ -63,6 +64,10 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 //減算
 //a - b = c
 int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
+
+//インクリメント
+//a + 1 = b
+int increment(const struct NUMBER *a,struct NUMBER *b);
 
 //正誤判定
 void diff(int count);

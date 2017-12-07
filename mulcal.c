@@ -344,6 +344,16 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	return ret;
 }
 
+int increment(const struct NUMBER *a,struct NUMBER *b){
+	struct NUMBER one;
+	int ret;
+	
+	setInt(&one,1);
+	ret=add(a,&one,b);
+
+	return ret;
+}
+
 void diff(int count){
 	int i;
 	int x,y,z;
@@ -358,16 +368,16 @@ void diff(int count){
 		y=RAND_MAX/2-random();
 		setInt(&a,x);
 		setInt(&b,y);
-		add(&a,&b,&c);
+		sub(&a,&b,&c);
 		getInt(&c,&z);
-		if(x+y!=z){
+		if(x-y!=z){
 			printf("mismatched.%d\n",i);
-			printf("x = %d,y = %d,x + y = %d\n",x,y,x+y);
+			printf("x = %d,y = %d,x - y = %d\n",x,y,x-y);
 			printf("a = ");
 			dispNumber(&a);
 			printf("\nb = ");
 			dispNumber(&b);
-			printf("\na + b =");
+			printf("\na - b =");
 			dispNumber(&c);
 			putchar('\n');
 		}
