@@ -96,14 +96,38 @@ int main(){
 	printf(", r = %d\n",r);
 
 	putchar('\n');
-	setInt(&a,10e10);
-	r=0;
-	while(!r){
-		r=increment(&a,&b);
-		swap(&a,&b);
-	}
+	setRnd(&a,8);
+	r = increment(&a,&b);
+	printf("a = ");
+	dispNumber(&a);
+	putchar('\n');
+	printf("a++ = ");
+	dispNumber(&b);
+	putchar('\n');
 
-	//diff(10e6);
+	putchar('\n');
+	setRnd(&a,8);
+	r = decrement(&a,&b);
+	printf("a = ");
+	dispNumber(&a);
+	putchar('\n');
+	printf("a-- = ");
+	dispNumber(&b);
+	putchar('\n');
+
+	putchar('\n');
+	setInt(&a,random());
+	setInt(&b,random());
+	printf("a = ");
+	dispNumber(&a);
+	printf("\nb = ");
+	dispNumber(&b);
+	r = multiple(&a,&b,&c);
+	printf("\na * b = ");
+	dispNumber(&c);
+	printf(", r = %d\n",r);
+	
+	diff(10e4);
 	
 	return 0;
 }
