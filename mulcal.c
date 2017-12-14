@@ -365,7 +365,7 @@ int decrement(const struct NUMBER *a,struct NUMBER *b){
 }
 
 int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
-	int ret = 0;
+	int ret = 0,r1,r2,r3;
 	int i,j;
 	int buf = 0;
 	int h = 0;
@@ -373,34 +373,58 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 
 	clearByZero(c);
 
-	for(i=0;i<KETA;i++){
-		clearByZero(&d);
-		clearByZero(&e);
-		h = 0;
+	if(getSign(a)==1){
+		if(getSign(b)==1){
+			for(i=0;i<KETA;i++){
+				clearByZero(&d);
+				clearByZero(&e);
+				h = 0;
 
-		for(j=0;j<KETA;j++){
-			buf = a->n[j]*b->n[i]+h;
-			d.n[j] = buf%10;
-			h = buf/10;
-		}
-		if(h){
-			ret = -1;
-		}
-		for(j=0;j<i;j++){
-			ret = mulBy10(&d,&e);
-			swap(&d,&e);
-		}
+				for(j=0;j<KETA;j++){
+					buf = a->n[j]*b->n[i]+h;
+					d.n[j] = buf%10;
+					h = buf/10;
+				}
+				for(j=0;j<i;j++){
+					r1 = mulBy10(&d,&e);
+					swap(&d,&e);
+				}
 
-		ret = add(c,&d,&e);
-		copyNumber(&e,c);
+				r2 = add(c,&d,&e);
+				copyNumber(&e,c);
+
+				if(h){
+					r3 = -1;
+				}
+			}
+		}
+		if(getSign(b)==-1){
+			getAbs(b,&d);
+			ret = multiple(a,&d,c);
+			setSign(c,-1);
+		}
 	}
+	if(getSign(a)==-1){
+		if(getSign(b)==1){
+			getAbs(a,&d);
+			ret = multiple(&d,b,c);
+			setSign(c,-1);
+		}
+		if(getSign(b)==-1){
+			getAbs(a,&d);
+			getAbs(b,&e);
+			ret = multiple(&d,&e,c);
+		}
+	}
+
+	if(r1||r2||r3) ret=-1;
 
 	return ret;
 }
 
 void diff(int count){
 	int i;
-	int x,y,z;
+	int x,y,z,r;
 	struct NUMBER a,b,c;
 
 	clearByZero(&a);
@@ -408,20 +432,20 @@ void diff(int count){
 	clearByZero(&c);
 
 	for(i=0;i<count;i++){
-		x=RAND_MAX/2-random();
-		y=RAND_MAX/2-random();
+		x=random()-RAND_MAX/2;
+		y=random()-RAND_MAX/2;
 		setInt(&a,x);
 		setInt(&b,y);
-		sub(&a,&b,&c);
+		r = multiple(&a,&b,&c);
 		getInt(&c,&z);
-		if(x-y!=z){
+		if(!r&&x*y!=z){
 			printf("mismatched.%d\n",i);
-			printf("x = %d,y = %d,x - y = %d\n",x,y,x-y);
+			printf("x = %d,y = %d,x * y = %d\n",x,y,x*y);
 			printf("a = ");
 			dispNumber(&a);
 			printf("\nb = ");
 			dispNumber(&b);
-			printf("\na - b =");
+			printf("\na * b =");
 			dispNumber(&c);
 			putchar('\n');
 		}
