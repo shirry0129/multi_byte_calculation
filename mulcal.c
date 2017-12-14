@@ -364,6 +364,40 @@ int decrement(const struct NUMBER *a,struct NUMBER *b){
 	return ret;
 }
 
+int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
+	int ret = 0;
+	int i,j;
+	int buf = 0;
+	int h = 0;
+	struct NUMBER d,e;
+
+	clearByZero(c);
+
+	for(i=0;i<KETA;i++){
+		clearByZero(&d);
+		clearByZero(&e);
+		h = 0;
+
+		for(j=0;j<KETA;j++){
+			buf = a->n[j]*b->n[i]+h;
+			d.n[j] = buf%10;
+			h = buf/10;
+		}
+		if(h){
+			ret = -1;
+		}
+		for(j=0;j<i;j++){
+			ret = mulBy10(&d,&e);
+			swap(&d,&e);
+		}
+
+		ret = add(c,&d,&e);
+		copyNumber(&e,c);
+	}
+
+	return ret;
+}
+
 void diff(int count){
 	int i;
 	int x,y,z;

@@ -73,5 +73,9 @@ int increment(const struct NUMBER *a,struct NUMBER *b);
 //a - 1 = b
 int decrement(const struct NUMBER *a,struct NUMBER *b);
 
+//乗算
+//a * b = c
+int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
+
 //正誤判定
 void diff(int count);
