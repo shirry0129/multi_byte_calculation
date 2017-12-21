@@ -142,7 +142,7 @@ int main(){
 	dispNumber(&d);
 	printf(", r = %d\n",r);
 	
-	diff(10e6);
+	//diff(10e6);
 	
 	return 0;
 }
