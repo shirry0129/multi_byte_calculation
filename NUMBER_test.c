@@ -24,10 +24,11 @@ int main(){
 	// dispNumber(&c);
 	// putchar('\n');
 
-	// r = mulBy10(&b,&d);
-	// printf("b * 10 = ");
-	// dispNumber(&d);
-	// printf(", r = %d\n",r);
+	setInt(&b,random()%10000);
+	r = mulBy10(&b,&d);
+	printf("b * 10 = ");
+	dispNumber(&d);
+	printf(", r = %d\n",r);
 
 	// r = divBy10(&c,&e);
 	// printf("c / 10 = ");
@@ -66,8 +67,8 @@ int main(){
 	// printf("numComp() = %d\n",r);
 
 	//putchar('\n');
-	setInt(&a,-100);
-	setInt(&b,-500);
+	setInt(&a,random()%10000);
+	setInt(&b,random()%10000);
 	printf("a = ");
 	dispNumber(&a);
 	putchar('\n');
@@ -116,8 +117,8 @@ int main(){
 	putchar('\n');
 
 	putchar('\n');
-	setInt(&a,random());
-	setInt(&b,random());
+	setInt(&a,random()%10000);
+	setInt(&b,random()%10000);
 	printf("a = ");
 	dispNumber(&a);
 	printf("\nb = ");
@@ -125,6 +126,20 @@ int main(){
 	r = multiple(&a,&b,&c);
 	printf("\na * b = ");
 	dispNumber(&c);
+	printf(", r = %d\n",r);
+
+	putchar('\n');
+	setInt(&a,random()%10000);
+	setInt(&b,random()%10000);
+	printf("a = ");
+	dispNumber(&a);
+	printf("\nb = ");
+	dispNumber(&b);
+	r = divide(&a,&b,&c,&d);
+	printf("\na / b = ");
+	dispNumber(&c);
+	printf("\na %% b = ");
+	dispNumber(&d);
 	printf(", r = %d\n",r);
 	
 	diff(10e4);
