@@ -77,5 +77,9 @@ int decrement(const struct NUMBER *a,struct NUMBER *b);
 //a * b = c
 int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 
+//除算
+//a / b = c 余り d
+int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d);
+
 //正誤判定
 void diff(int count);

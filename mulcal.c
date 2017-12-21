@@ -365,7 +365,7 @@ int decrement(const struct NUMBER *a,struct NUMBER *b){
 }
 
 int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
-	int ret = 0,r1,r2,r3;
+	int ret = 0,r1,r2,r3 = 0;
 	int i,j;
 	int buf = 0;
 	int h = 0;
@@ -392,10 +392,9 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 
 				r2 = add(c,&d,&e);
 				copyNumber(&e,c);
-
-				if(h){
-					r3 = -1;
-				}
+			}
+			if(h){
+				r3 = -1;
 			}
 		}
 		if(getSign(b)==-1){
@@ -422,31 +421,57 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	return ret;
 }
 
+int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d){
+	struct NUMBER m,n;
+
+	clearByZero(c);
+	clearByZero(d);
+
+    if(!isZero(b)) return -1;
+
+	copyNumber(a,&n);
+
+    while(1){
+        if(numComp(&n,b)==-1) break;
+		increment(c,&m);
+		copyNumber(&m,c);
+        sub(&n,b,&m);
+		copyNumber(&m,&n);
+	}
+	copyNumber(&n,d);
+
+    return 0;
+}
+
 void diff(int count){
 	int i;
-	int x,y,z,r;
-	struct NUMBER a,b,c;
+	int x,y,z,w,r;
+	struct NUMBER a,b,c,d;
 
 	clearByZero(&a);
 	clearByZero(&b);
 	clearByZero(&c);
 
 	for(i=0;i<count;i++){
-		x=random()-RAND_MAX/2;
-		y=random()-RAND_MAX/2;
+		x=random()%100000000;
+		y=random()%100000000;
 		setInt(&a,x);
 		setInt(&b,y);
-		r = multiple(&a,&b,&c);
+		divide(&a,&b,&c,&d);
 		getInt(&c,&z);
-		if(!r&&x*y!=z){
+		getInt(&d,&w);
+		if((x/y)!=z||(x%y)!=w){
 			printf("mismatched.%d\n",i);
-			printf("x = %d,y = %d,x * y = %d\n",x,y,x*y);
+			printf("x = %d,y = %d,x / y = %d,x %% y = %d\n",x,y,x/y,x%y);
 			printf("a = ");
 			dispNumber(&a);
 			printf("\nb = ");
 			dispNumber(&b);
-			printf("\na * b =");
+			printf("\na / b =");
 			dispNumber(&c);
+			printf("\na %% b =");
+			dispNumber(&d);
+			printf("%d,%d\n",z,w);
 			putchar('\n');
 		}
 	}
