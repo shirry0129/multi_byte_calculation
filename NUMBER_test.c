@@ -129,8 +129,8 @@ int main(){
 	printf(", r = %d\n",r);
 
 	putchar('\n');
-	setInt(&a,random()%10000);
-	setInt(&b,random()%10000);
+	setInt(&a,(random()-RAND_MAX/2)%10000);
+	setInt(&b,(random()-RAND_MAX/2)%10000);
 	printf("a = ");
 	dispNumber(&a);
 	printf("\nb = ");
@@ -142,7 +142,7 @@ int main(){
 	dispNumber(&d);
 	printf(", r = %d\n",r);
 	
-	diff(10e4);
+	diff(10e6);
 	
 	return 0;
 }

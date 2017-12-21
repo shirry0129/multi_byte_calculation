@@ -422,23 +422,47 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 }
 
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d){
-	struct NUMBER m,n;
+	struct NUMBER m,n,p,q;
 
 	clearByZero(c);
 	clearByZero(d);
 
     if(!isZero(b)) return -1;
 
-	copyNumber(a,&n);
 
-    while(1){
-        if(numComp(&n,b)==-1) break;
-		increment(c,&m);
-		copyNumber(&m,c);
-        sub(&n,b,&m);
-		copyNumber(&m,&n);
+	if(getSign(a)==1){
+		if(getSign(b)==1){
+			copyNumber(a,&n);
+
+			while(1){
+				if(numComp(&n,b)==-1) break;
+				increment(c,&m);
+				copyNumber(&m,c);
+				sub(&n,b,&m);
+				copyNumber(&m,&n);
+			}
+			copyNumber(&n,d);
+		}
+		if(getSign(b)==-1){
+			getAbs(b,&p);
+			divide(a,&p,c,d);
+			setSign(c,-1);
+		}
 	}
-	copyNumber(&n,d);
+	if(getSign(a)==-1){
+		if(getSign(b)==1){
+			getAbs(a,&p);
+			divide(&p,b,c,d);
+			setSign(c,-1);
+			setSign(d,-1);
+		}
+		if(getSign(b)==-1){
+			getAbs(a,&p);
+			getAbs(b,&q);
+			divide(&p,&q,c,d);
+			setSign(d,-1);
+		}
+	}
 
     return 0;
 }
@@ -453,8 +477,8 @@ void diff(int count){
 	clearByZero(&c);
 
 	for(i=0;i<count;i++){
-		x=random()%100000000;
-		y=random()%100000000;
+		x=(random()-RAND_MAX/2)%100000000;
+		y=(random()-RAND_MAX/2)%100000000;
 		setInt(&a,x);
 		setInt(&b,y);
 		divide(&a,&b,&c,&d);
