@@ -468,47 +468,78 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct
 }
 
 int int_divide(const struct NUMBER *a,const int b,struct NUMBER *c,int *d){
-	int h=0,t;
+	int h=0,t,p,q;
 	int i;
+	struct NUMBER buf;
 
 	if(b==0||b>9) return -1;
 
 	clearByZero(c);
+	clearByZero(&buf);
 
-	for(i=KETA-1;i>=0;i--){
-		t=10*h+a->n[i];
-		h=t%b;
-		c->n[i]=(t-h)/b;
+	if(getSign(a)==1){
+		if(b>0){
+			for(i=KETA-1;i>=0;i--){
+				t=10*h+a->n[i];
+				h=t%b;
+				c->n[i]=(t-h)/b;
+			}
+
+			*d=h;
+		}
+		if(b<0){
+			p=b*-1;
+			int_divide(a,p,c,d);
+			setSign(c,-1);
+		}
 	}
-
-	*d=h;
+	if(getSign(a)==-1){
+		if(b>0){
+			getAbs(a,&buf);
+			int_divide(&buf,b,c,d);
+			setSign(c,-1);
+			*d*=-1;
+		}
+		if(b<0){
+			getAbs(a,&buf);
+			p=b*-1;
+			int_divide(&buf,p,c,d);
+			*d*=-1;
+		}
+	}
 
 	return 0;
 }
 
-// int sqrt_newton(struct NUMBER *a,struct NUMBER *b){
+// int sqrt_newton(const struct NUMBER *a,struct NUMBER *b){
 // 	struct NUMBER x;  //現在の平方根の近似値
-//     struct NUMBER c;  //1つ前のx
-//     struct NUMBER d;  //2つ前のx
+// 	struct NUMBER c;  //1つ前のx
+// 	struct NUMBER d;  //2つ前のx
 // 	struct NUMBER e,f;
 
-//     x=N/2;
-//     if(x==0) return N;  //N=0 or 1 なら√N=N
-//     if(x<0) return -1;  //N<0 ならエラーで-1を返す
-//     b=x;
-//     c=x;
+// 	setInt(&f,0);
 
-//     while(1){
-//         c=b;    //2つ前のx
-//         b=x;    //1つ前のx
-//         x=(b+(N/b))/2;   //x_{i+1}=(x_{i}+(N/x_{i}))/2
+// 	int_divide(a,2,&x,&e);
+// 	if(isZero(&x)){
+// 		copyNumber(a,b);  //a=0 or 1 なら√a=a
+// 		return 0;
+// 	}
+// 	if(numComp(a,&f)==-1) return -1;  //N<0 ならエラーで-1を返す
 
-//         if(x==b)break;  //収束
-//         if(x==c){       //振動
-//             if(b<x)x=b; //小さいほうをとる
-//             break;
-//         }
-//     }
+// 	copyNumber(&x,&c);
+// 	copyNumber(&x,&d);
+
+// 	while(1){
+// 		copyNumber(&c,&d);	//2つ前のx
+// 		copyNumber(&x,&c);	//1つ前のx
+// 		x=(b+(N/b))/2;   //x_{i+1}=(x_{i}+(N/x_{i}))/2
+
+// 		if(x==b)break;  //収束
+// 		if(x==c){       //振動
+// 			if(b<x)x=b; //小さいほうをとる
+// 			break;
+// 		}
+// 	}
 
 //     return x;
 // }
@@ -525,25 +556,19 @@ void diff(int count){
 
 	for(i=0;i<count;i++){
 		x=(random()-RAND_MAX/2)%100000000;
-		y=(random()-RAND_MAX/2)%100000000;
+		y=random()%9+1;
+		if(random()%2) y*=-1;
 		setInt(&a,x);
-		setInt(&b,y);
-		divide(&a,&b,&c,&d);
+		r = int_divide(&a,y,&c,&w);
 		getInt(&c,&z);
-		getInt(&d,&w);
-		if((x/y)!=z||(x%y)!=w){
+		if(((x/y)!=z||(x%y)!=w)){
 			printf("mismatched.%d\n",i);
 			printf("x = %d,y = %d,x / y = %d,x %% y = %d\n",x,y,x/y,x%y);
 			printf("a = ");
 			dispNumber(&a);
-			printf("\nb = ");
-			dispNumber(&b);
 			printf("\na / b =");
 			dispNumber(&c);
-			printf("\na %% b =");
-			dispNumber(&d);
-			printf("%d,%d\n",z,w);
-			putchar('\n');
+			printf("\na %% b = %d\n",w);
 		}
 	}
 }

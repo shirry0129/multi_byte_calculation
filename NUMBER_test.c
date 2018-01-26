@@ -17,6 +17,8 @@ int main(){
 	dispNumber(&c);
 	putchar('\n');
 	printf("a %% b = %d\n",x);
-	
+
+	diff(10e6);
+
 	return 0;
 }
