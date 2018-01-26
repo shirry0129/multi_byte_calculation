@@ -81,5 +81,13 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
 //a / b = c 余り d
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d);
 
+//一桁整数による除算
+//a / b = c 余り d
+int int_divide(const struct NUMBER *a,const int b,struct NUMBER *c,int *d);
+
+//平方根
+//b = √a
+//int sqrt_newton(struct NUMBER *a,struct NUMBER *b);
+
 //正誤判定
 void diff(int count);
