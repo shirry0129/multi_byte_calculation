@@ -10,15 +10,18 @@ int main(){
 	srandom(time(NULL));
 
 	setInt(&a,123456);
+	setInt(&b,2);
 
-	int_divide(&a,7,&c,&x);
+	divide(&a,&b,&c,&d);
 
 	printf("a / b =");
 	dispNumber(&c);
 	putchar('\n');
-	printf("a %% b = %d\n",x);
+	printf("a %% b =");
+	dispNumber(&d);
+	putchar('\n');
 
-	diff(10e6);
+	//diff(10e6);
 
 	return 0;
 }

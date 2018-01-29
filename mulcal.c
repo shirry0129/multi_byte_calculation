@@ -47,7 +47,7 @@ void clearByZero(struct NUMBER *a){
 	setSign(a,1);
 }
 
-void setRnd(struct NUMBER *a,int k){
+void setRnd(struct NUMBER *a,int keta){
 	int i,rimit;
 
 	clearByZero(a);
@@ -69,19 +69,19 @@ void setRnd(struct NUMBER *a,int k){
 	}
 }
 
-void copyNumber(const struct NUMBER *a,struct NUMBER *b){
+void copyNumber(const struct NUMBER *source,struct NUMBER *target){
 	int i;
 	
 	for(i=0;i<KETA;i++){
-		b->n[i]=a->n[i];
+		target->n[i]=source->n[i];
 	}
 
-	setSign(b,getSign(a));
+	setSign(target,getSign(source));
 }
 
-void getAbs(const struct NUMBER *a,struct NUMBER *b){
-	copyNumber(a,b);
-	setSign(b,1);
+void getAbs(const struct NUMBER *source,struct NUMBER *target){
+	copyNumber(source,target);
+	setSign(target,1);
 }
 
 int isZero(const struct NUMBER *a){
@@ -136,10 +136,10 @@ int divBy10(const struct NUMBER *a,struct NUMBER *b){
 }
 
 void swap(struct NUMBER *a,struct NUMBER *b){
-	struct NUMBER c;
-	copyNumber(a,&c);
+	struct NUMBER buf;
+	copyNumber(a,&buf);
 	copyNumber(b,a);
-	copyNumber(&c,b);
+	copyNumber(&buf,b);
 }
 
 int setInt(struct NUMBER *a,int x){
@@ -203,13 +203,13 @@ int getInt(const struct NUMBER *a,int *x){
 	return 0;
 }
 
-void setSign(struct NUMBER *a,const int s){
+void setSign(struct NUMBER *a,const int sign){
 	if(isZero(a)==0){
 		a->sign=1;
 		return;
 	}
 
-	a->sign=s;
+	a->sign=sign;
 }
 
 int getSign(const struct NUMBER *a){
@@ -253,91 +253,91 @@ int numComp(const struct NUMBER *a,const struct NUMBER *b){
 	}
 }
 
-int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
+int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 	int i;
-	int e=0,buf;
+	int carry=0,buf;
 	int ret=0;
 	struct NUMBER Aabs,Babs;
 
-	clearByZero(c);
+	clearByZero(sum);
 	
 	if(getSign(a)==1){
 		if(getSign(b)==1){
 			for(i=0;i<KETA;i++){
-				buf=a->n[i]+b->n[i]+e;
-				c->n[i]=buf%10;
-				e=buf/10;
+				buf=a->n[i]+b->n[i]+carry;
+				sum->n[i]=buf%10;
+				carry=buf/10;
 			}
 		}
 		if(getSign(b)==-1){
 			getAbs(b,&Babs);
-			ret=sub(a,&Babs,c);
+			ret=sub(a,&Babs,sum);
 		}
 	}
 	if(getSign(a)==-1){
 		if(getSign(b)==1){
 			getAbs(a,&Aabs);
-			ret=sub(b,&Aabs,c);
+			ret=sub(b,&Aabs,sum);
 		}
 		if(getSign(b)==-1){
 			getAbs(a,&Aabs);
 			getAbs(b,&Babs);
-			ret=add(&Aabs,&Babs,c);
-			setSign(c,-1);
+			ret=add(&Aabs,&Babs,sum);
+			setSign(sum,-1);
 		}
 	}
 
-	if(e){
+	if(carry){
 		ret=-1;
 	}
 
 	return ret;
 }
 
-int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
+int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 	int i;
-	int h=0,buf;
+	int borrow=0,buf;
 	int ret=0;
 	struct NUMBER Aabs,Babs;
 
-	clearByZero(c);
+	clearByZero(diff);
 
 	if(getSign(a)==1){
 		if(getSign(b)==1){
 			if(numComp(a,b)==0||numComp(a,b)==1){
 				for(i=0;i<KETA;i++){
-					if(a->n[i]-h<b->n[i]){
-						buf=10+a->n[i]-h-b->n[i];
-						h=1;
+					if(a->n[i]-borrow<b->n[i]){
+						buf=10+a->n[i]-borrow-b->n[i];
+						borrow=1;
 					}else{
-						buf=a->n[i]-h-b->n[i];
-						h=0;
+						buf=a->n[i]-borrow-b->n[i];
+						borrow=0;
 					}
-					c->n[i]=buf;
+					diff->n[i]=buf;
 				}
 			}else{
-				ret=sub(b,a,c);
-				setSign(c,-1);
+				ret=sub(b,a,diff);
+				setSign(diff,-1);
 			}
 		}
 		if(getSign(b)==-1){
 			getAbs(b,&Babs);
-			ret=add(a,&Babs,c);
+			ret=add(a,&Babs,diff);
 		}
 	}
 	if(getSign(a)==-1){
 		if(getSign(b)==1){
 			getAbs(a,&Aabs);
-			ret=add(&Aabs,b,c);
-			setSign(c,-1);
+			ret=add(&Aabs,b,diff);
+			setSign(diff,-1);
 		}
 		if(getSign(b)==-1){
 			getAbs(b,&Babs);
-			ret=add(a,&Babs,c);
+			ret=add(a,&Babs,diff);
 		}
 	}
 
-	if(h){
+	if(borrow){
 		ret=-1;
 	}
 
@@ -364,55 +364,55 @@ int decrement(const struct NUMBER *a,struct NUMBER *b){
 	return ret;
 }
 
-int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
+int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *product){
 	int ret = 0,r1,r2,r3 = 0;
 	int i,j;
 	int buf = 0;
-	int h = 0;
+	int carry = 0;
 	struct NUMBER d,e;
 
-	clearByZero(c);
+	clearByZero(product);
 
 	if(getSign(a)==1){
 		if(getSign(b)==1){
 			for(i=0;i<KETA;i++){
 				clearByZero(&d);
 				clearByZero(&e);
-				h = 0;
+				carry = 0;
 
 				for(j=0;j<KETA;j++){
-					buf = a->n[j]*b->n[i]+h;
+					buf = a->n[j]*b->n[i]+carry;
 					d.n[j] = buf%10;
-					h = buf/10;
+					carry = buf/10;
 				}
 				for(j=0;j<i;j++){
 					r1 = mulBy10(&d,&e);
 					swap(&d,&e);
 				}
 
-				r2 = add(c,&d,&e);
-				copyNumber(&e,c);
+				r2 = add(product,&d,&e);
+				copyNumber(&e,product);
 			}
-			if(h){
+			if(carry){
 				r3 = -1;
 			}
 		}
 		if(getSign(b)==-1){
 			getAbs(b,&d);
-			ret = multiple(a,&d,c);
-			setSign(c,-1);
+			ret = multiple(a,&d,product);
+			setSign(product,-1);
 		}
 	}
 	if(getSign(a)==-1){
 		if(getSign(b)==1){
 			getAbs(a,&d);
-			ret = multiple(&d,b,c);
-			setSign(c,-1);
+			ret = multiple(&d,b,product);
+			setSign(product,-1);
 		}
 		if(getSign(b)==-1){
 			getAbs(a,&d);
 			getAbs(b,&e);
-			ret = multiple(&d,&e,c);
+			ret = multiple(&d,&e,product);
 		}
 	}
 
@@ -421,90 +421,89 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c){
 	return ret;
 }
 
-int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d){
-	struct NUMBER m,n,p,q;
+int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder){
+	struct NUMBER buffer,abuf,aabs,babs;
 
-	clearByZero(c);
-	clearByZero(d);
+	clearByZero(quotient);
+	clearByZero(remainder);
 
-    if(!isZero(b)) return -1;
-
+	if(!isZero(b)) return -1;
 
 	if(getSign(a)==1){
 		if(getSign(b)==1){
-			copyNumber(a,&n);
+			copyNumber(a,&abuf);
 
 			while(1){
-				if(numComp(&n,b)==-1) break;
-				increment(c,&m);
-				copyNumber(&m,c);
-				sub(&n,b,&m);
-				copyNumber(&m,&n);
+				if(numComp(&abuf,b)==-1) break;
+				increment(quotient,&buffer);
+				copyNumber(&buffer,quotient);
+				sub(&abuf,b,&buffer);
+				copyNumber(&buffer,&abuf);
 			}
-			copyNumber(&n,d);
+			copyNumber(&abuf,remainder);
 		}
 		if(getSign(b)==-1){
-			getAbs(b,&p);
-			divide(a,&p,c,d);
-			setSign(c,-1);
+			getAbs(b,&babs);
+			divide(a,&babs,quotient,remainder);
+			setSign(quotient,-1);
 		}
 	}
 	if(getSign(a)==-1){
 		if(getSign(b)==1){
-			getAbs(a,&p);
-			divide(&p,b,c,d);
-			setSign(c,-1);
-			setSign(d,-1);
+			getAbs(a,&aabs);
+			divide(&aabs,b,quotient,remainder);
+			setSign(quotient,-1);
+			setSign(remainder,-1);
 		}
 		if(getSign(b)==-1){
-			getAbs(a,&p);
-			getAbs(b,&q);
-			divide(&p,&q,c,d);
-			setSign(d,-1);
+			getAbs(a,&aabs);
+			getAbs(b,&babs);
+			divide(&aabs,&babs,quotient,remainder);
+			setSign(remainder,-1);
 		}
 	}
 
     return 0;
 }
 
-int int_divide(const struct NUMBER *a,const int b,struct NUMBER *c,int *d){
-	int h=0,t,p,q;
+int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *remainder){
+	int rembuf=0,t,babs;
 	int i;
-	struct NUMBER buf;
+	struct NUMBER aabs;
 
 	if(b==0||b>9) return -1;
 
-	clearByZero(c);
-	clearByZero(&buf);
+	clearByZero(quotient);
+	clearByZero(&aabs);
 
 	if(getSign(a)==1){
 		if(b>0){
 			for(i=KETA-1;i>=0;i--){
-				t=10*h+a->n[i];
-				h=t%b;
-				c->n[i]=(t-h)/b;
+				t=10*rembuf+a->n[i];
+				rembuf=t%b;
+				quotient->n[i]=(t-rembuf)/b;
 			}
 
-			*d=h;
+			*remainder=rembuf;
 		}
 		if(b<0){
-			p=b*-1;
-			int_divide(a,p,c,d);
-			setSign(c,-1);
+			babs=b*-1;
+			int_divide(a,babs,quotient,remainder);
+			setSign(quotient,-1);
 		}
 	}
 	if(getSign(a)==-1){
 		if(b>0){
-			getAbs(a,&buf);
-			int_divide(&buf,b,c,d);
-			setSign(c,-1);
-			*d*=-1;
+			getAbs(a,&aabs);
+			int_divide(&aabs,b,quotient,remainder);
+			setSign(quotient,-1);
+			*remainder*=-1;
 		}
 		if(b<0){
-			getAbs(a,&buf);
-			p=b*-1;
-			int_divide(&buf,p,c,d);
-			*d*=-1;
+			getAbs(a,&aabs);
+			babs=b*-1;
+			int_divide(&aabs,babs,quotient,remainder);
+			*remainder*=-1;
 		}
 	}
 
@@ -556,19 +555,25 @@ void diff(int count){
 
 	for(i=0;i<count;i++){
 		x=(random()-RAND_MAX/2)%100000000;
-		y=random()%9+1;
-		if(random()%2) y*=-1;
+		y=(random()-RAND_MAX/2)%100;
+		if(y==0) y=1;
 		setInt(&a,x);
-		r = int_divide(&a,y,&c,&w);
+		setInt(&b,y);
+		divide(&a,&b,&c,&d);
 		getInt(&c,&z);
+		getInt(&d,&w);
 		if(((x/y)!=z||(x%y)!=w)){
 			printf("mismatched.%d\n",i);
 			printf("x = %d,y = %d,x / y = %d,x %% y = %d\n",x,y,x/y,x%y);
 			printf("a = ");
 			dispNumber(&a);
+			printf("\nb = ");
+			dispNumber(&b);
 			printf("\na / b =");
 			dispNumber(&c);
-			printf("\na %% b = %d\n",w);
+			printf("\na %% b =");
+			dispNumber(&d);
+			printf("\nz = %d,w = %d\n",z,w);
 		}
 	}
 }

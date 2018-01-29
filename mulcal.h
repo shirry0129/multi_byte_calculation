@@ -16,15 +16,15 @@ void dispNumberZeroSuppress(struct NUMBER *a);
 void clearByZero(struct NUMBER *a);
 
 //乱数設定
-void setRnd(struct NUMBER *a,int k);
+void setRnd(struct NUMBER *a,int keta);
 
 //コピー
-//a → b
-void copyNumber(const struct NUMBER *a,struct NUMBER *b);
+//source → target
+void copyNumber(const struct NUMBER *source,struct NUMBER *target);
 
 //絶対値
-//aの絶対値をbに返す
-void getAbs(const struct NUMBER *a,struct NUMBER *b);
+//sourceの絶対値をtargetに返す
+void getAbs(const struct NUMBER *source,struct NUMBER *target);
 
 //ゼロ判別
 //0なら0を返す
@@ -46,7 +46,7 @@ int setInt(struct NUMBER *a,int x);
 int getInt(const struct NUMBER *a,int *x);
 
 //符号設定
-void setSign(struct NUMBER *a,const int s);
+void setSign(struct NUMBER *a,const int sign);
 
 //符号取得
 int getSign(const struct NUMBER *a);
@@ -58,12 +58,12 @@ int getSign(const struct NUMBER *a);
 int numComp(const struct NUMBER *a,const struct NUMBER *b);
 
 //加算
-//a + b = c
-int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
+//a + b = sum
+int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum);
 
 //減算
-//a - b = c
-int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
+//a - b = diff
+int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff);
 
 //インクリメント
 //a + 1 = b
@@ -74,16 +74,16 @@ int increment(const struct NUMBER *a,struct NUMBER *b);
 int decrement(const struct NUMBER *a,struct NUMBER *b);
 
 //乗算
-//a * b = c
-int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c);
+//a * b = product
+int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *product);
 
 //除算
-//a / b = c 余り d
-int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *c,struct NUMBER *d);
+//a / b = quotient 余り remainder
+int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder);
 
 //一桁整数による除算
 //a / b = c 余り d
-int int_divide(const struct NUMBER *a,const int b,struct NUMBER *c,int *d);
+int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *remainder);
 
 //平方根
 //b = √a
