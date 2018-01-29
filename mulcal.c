@@ -52,10 +52,10 @@ void setRnd(struct NUMBER *a,int keta){
 
 	clearByZero(a);
 
-	if(k>KETA){
+	if(keta>KETA){
 		rimit=KETA;
 	}else{
-		rimit=k;
+		rimit=keta;
 	}
 
 	for(i=0;i<rimit;i++){
@@ -71,6 +71,8 @@ void setRnd(struct NUMBER *a,int keta){
 
 void copyNumber(const struct NUMBER *source,struct NUMBER *target){
 	int i;
+
+	clearByZero(target);
 	
 	for(i=0;i<KETA;i++){
 		target->n[i]=source->n[i];
@@ -99,6 +101,8 @@ int isZero(const struct NUMBER *a){
 int mulBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret=0;
 	int i;
+
+	clearByZero(b);
 
 	if(a->n[KETA-1]){
 		ret=-1;
@@ -422,7 +426,7 @@ int multiple(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *produc
 }
 
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder){
-	struct NUMBER buffer,abuf,aabs,babs;
+	struct NUMBER buf,abuf,bbuf,aabs,babs,e;
 
 	clearByZero(quotient);
 	clearByZero(remainder);
@@ -435,10 +439,30 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 
 			while(1){
 				if(numComp(&abuf,b)==-1) break;
-				increment(quotient,&buffer);
-				copyNumber(&buffer,quotient);
-				sub(&abuf,b,&buffer);
-				copyNumber(&buffer,&abuf);
+				copyNumber(b,&bbuf);
+				clearByZero(&e);
+				setInt(&e,1);
+
+				while(1){
+					if(numComp(&abuf,&bbuf)!=1) break;
+					mulBy10(&bbuf,&buf);
+					copyNumber(&buf,&bbuf);
+					mulBy10(&e,&buf);
+					copyNumber(&buf,&e);
+				}
+
+				if(numComp(b,&bbuf)==-1){
+					divBy10(&bbuf,&buf);
+					copyNumber(&buf,&bbuf);
+					divBy10(&e,&buf);
+					copyNumber(&buf,&e);
+				}
+
+				sub(&abuf,&bbuf,&buf);
+				copyNumber(&buf,&abuf);
+
+				add(quotient,&e,&buf);
+				copyNumber(&buf,quotient);
 			}
 			copyNumber(&abuf,remainder);
 		}

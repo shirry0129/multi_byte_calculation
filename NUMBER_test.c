@@ -9,8 +9,8 @@ int main(){
 
 	srandom(time(NULL));
 
-	setInt(&a,123456);
-	setInt(&b,2);
+	setInt(&a,12345);
+	setInt(&b,6);
 
 	divide(&a,&b,&c,&d);
 
@@ -21,7 +21,7 @@ int main(){
 	dispNumber(&d);
 	putchar('\n');
 
-	//diff(10e6);
+	diff(10e6);
 
 	return 0;
 }
