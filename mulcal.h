@@ -1,4 +1,4 @@
-#define KETA 20
+#define KETA 202
 
 struct NUMBER
 {
@@ -87,7 +87,10 @@ int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *r
 
 //平方根
 //b = √a
-// int sqrt_newton(const struct NUMBER *a,struct NUMBER *b);
+int sqrt_newton(const struct NUMBER *a,struct NUMBER *b);
+
+//*10^n
+int mulBy10n(const struct NUMBER *a,int n,struct NUMBER *b);
 
 //正誤判定
 void diff(int count);

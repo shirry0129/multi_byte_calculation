@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<limits.h>
+#include<math.h>
 
 void dispNumber(const struct NUMBER *a){
     int i;
@@ -33,7 +34,9 @@ void dispNumberZeroSuppress(struct NUMBER *a){
 	}
 
 	for(;i>=0;i--){
-		printf("%2d",a->n[i]);
+		printf("%d",a->n[i]);
+		if(i%5==0) putchar(' ');
+		if(i%50==0) putchar('\n');
 	}
 }
 
@@ -71,8 +74,6 @@ void setRnd(struct NUMBER *a,int keta){
 
 void copyNumber(const struct NUMBER *source,struct NUMBER *target){
 	int i;
-
-	clearByZero(target);
 	
 	for(i=0;i<KETA;i++){
 		target->n[i]=source->n[i];
@@ -101,8 +102,6 @@ int isZero(const struct NUMBER *a){
 int mulBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret=0;
 	int i;
-
-	clearByZero(b);
 
 	if(a->n[KETA-1]){
 		ret=-1;
@@ -149,8 +148,6 @@ void swap(struct NUMBER *a,struct NUMBER *b){
 int setInt(struct NUMBER *a,int x){
 	int ret=0;
 	int i;
-
-	clearByZero(a);
 
 	if(x<0){
 		for(i=0;i<KETA;i++){
@@ -262,9 +259,9 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 	int carry=0,buf;
 	int ret=0;
 	struct NUMBER Aabs,Babs;
-
-	clearByZero(sum);
 	
+	clearByZero(sum);
+
 	if(getSign(a)==1){
 		if(getSign(b)==1){
 			for(i=0;i<KETA;i++){
@@ -308,7 +305,7 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 
 	if(getSign(a)==1){
 		if(getSign(b)==1){
-			if(numComp(a,b)==0||numComp(a,b)==1){
+			if(numComp(a,b)>=0){
 				for(i=0;i<KETA;i++){
 					if(a->n[i]-borrow<b->n[i]){
 						buf=10+a->n[i]-borrow-b->n[i];
@@ -452,8 +449,10 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 				}
 
 				if(numComp(b,&bbuf)==-1){
+					clearByZero(&buf);
 					divBy10(&bbuf,&buf);
 					copyNumber(&buf,&bbuf);
+					clearByZero(&buf);
 					divBy10(&e,&buf);
 					copyNumber(&buf,&e);
 				}
@@ -497,7 +496,6 @@ int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *r
 
 	if(b==0||b>9) return -1;
 
-	clearByZero(quotient);
 	clearByZero(&aabs);
 
 	if(getSign(a)==1){
@@ -534,70 +532,97 @@ int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *r
 	return 0;
 }
 
-// int sqrt_newton(const struct NUMBER *a,struct NUMBER *b){
-// 	struct NUMBER x;  //現在の平方根の近似値
-// 	struct NUMBER c;  //1つ前のx
-// 	struct NUMBER d;  //2つ前のx
-// 	struct NUMBER e,f;
+int sqrt_newton(const struct NUMBER *a,struct NUMBER *b){
+	struct NUMBER c;  //1つ前のx
+	struct NUMBER d;  //2つ前のx
+	struct NUMBER Nbuf,garbage,x2;
+	int ibuf;
 
-// 	setInt(&f,0);
+	clearByZero(b);
 
-// 	int_divide(a,2,&x,&e);
-// 	if(isZero(&x)){
-// 		copyNumber(a,b);  //a=0 or 1 なら√a=a
-// 		return 0;
-// 	}
-// 	if(numComp(a,&f)==-1) return -1;  //N<0 ならエラーで-1を返す
+	int_divide(a,2,b,&ibuf);
+	if(isZero(b)==0){
+		copyNumber(a,b);  //a=0 or 1 なら√a=a
+		return 0;
+	}
+	if(getSign(a)==-1) return -1;  //a<0 ならエラーで-1を返す
 
-// 	copyNumber(&x,&c);
-// 	copyNumber(&x,&d);
+	copyNumber(b,&c);
+	copyNumber(b,&d);
 
-// 	while(1){
-// 		copyNumber(&c,&d);	//2つ前のx
-// 		copyNumber(&x,&c);	//1つ前のx
-// 		x=(b+(N/b))/2;   //x_{i+1}=(x_{i}+(N/x_{i}))/2
+	while(1){
+		copyNumber(&c,&d);	//2つ前のx
+		copyNumber(b,&c);	//1つ前のx
 
-// 		if(x==b)break;  //収束
-// 		if(x==c){       //振動
-// 			if(b<x)x=b; //小さいほうをとる
-// 			break;
-// 		}
-// 	}
+		divide(a,&c,&Nbuf,&garbage);
+		add(&Nbuf,&c,&x2);
+		int_divide(&x2,2,b,&ibuf);
+		//x=(b+(N/b))/2;   //x_{i+1}=(x_{i}+(N/x_{i}))/2
 
-//     return x;
-// }
+		ibuf = numComp(b,&c);
+		if(ibuf == 0)break;  //収束
+		if(numComp(b,&d)==0){       //振動
+			if(ibuf == 1) copyNumber(&c,b); //小さいほうをとる
+			break;
+		}
+	}
 
+    return 0;
+}
+
+int mulBy10n(const struct NUMBER *a,int index,struct NUMBER *b){
+	int ret=0;
+	int i;
+
+	if(index>=KETA) {
+		return -1;
+	}
+	if(index==0){
+		copyNumber(a,b);
+		return 0;
+	}
+
+	for(i=1;i<=index;i++){
+		if(a->n[KETA-i]){
+			ret=-1;
+			break;
+		}
+	}
+
+	for(i=0;i<KETA-index;i++){
+		b->n[i+index]=a->n[i];
+	}
+	for(i=0;i<index;i++){
+		b->n[i]=0;
+	}
+
+	setSign(b,getSign(a));
+
+	return ret;
+}
 
 void diff(int count){
 	int i;
-	int x,y,z,w,r;
+	int x,y,z,w,r1,r2;
 	struct NUMBER a,b,c,d;
 
 	clearByZero(&a);
 	clearByZero(&b);
-	clearByZero(&c);
 
 	for(i=0;i<count;i++){
-		x=(random()-RAND_MAX/2)%100000000;
-		y=(random()-RAND_MAX/2)%100;
-		if(y==0) y=1;
+		x=(random()-RAND_MAX/2)%count;
+		y=random()%KETA;
 		setInt(&a,x);
-		setInt(&b,y);
-		divide(&a,&b,&c,&d);
-		getInt(&c,&z);
-		getInt(&d,&w);
-		if(((x/y)!=z||(x%y)!=w)){
+		r1 = mulBy10n(&a,y,&b);
+		r2 = getInt(&b,&z);
+		if(r1==0&&r2==0&&x*pow(10,y)!=z){
 			printf("mismatched.%d\n",i);
-			printf("x = %d,y = %d,x / y = %d,x %% y = %d\n",x,y,x/y,x%y);
+			printf("x = %d,y = %d,xey = %d\n",x,y,x*pow(10,y));
 			printf("a = ");
 			dispNumber(&a);
-			printf("\nb = ");
+			printf("\naey = ");
 			dispNumber(&b);
-			printf("\na / b =");
-			dispNumber(&c);
-			printf("\na %% b =");
-			dispNumber(&d);
-			printf("\nz = %d,w = %d\n",z,w);
+			putchar('\n');
 		}
 	}
 }
