@@ -22,16 +22,10 @@ int main(){
 	clearByZero(&e);
 	clearByZero(&one);
 
-	setInt(&a,5);
-	setInt(&e,1);
-	mulBy10n(&a,KETA-2,&b);
-	mulBy10n(&e,(KETA-2)/2,&one);
-	sqrt_newton(&b,&c);
-	add(&one,&c,&sum);
-	int_divide(&sum,2,&d,&x);
+	setRnd(&a,KETA);
 
 	printf("phi = ");
-	dispNumberZeroSuppress(&d);
+	dispNumberZeroSuppress(&a);
 	putchar('\n');
 
 	gettimeofday(&tv,NULL);

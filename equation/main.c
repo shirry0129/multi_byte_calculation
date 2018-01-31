@@ -13,9 +13,9 @@ int main(){
 
 	clearByZero(&a);
 	clearByZero(&b);
-	//clearByZero(&c);
+	clearByZero(&c);
 	clearByZero(&d);
-	//clearByZero(&e);
+	clearByZero(&e);
 	clearByZero(&one);
 
 	setInt(&a,5);

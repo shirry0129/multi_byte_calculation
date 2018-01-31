@@ -276,14 +276,16 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder){
 	struct NUMBER buf,abuf,bbuf,aabs,babs,e;
+	int asign=getSign(a);
+	int bsign=getSign(b);
 
 	clearByZero(quotient);
 	clearByZero(remainder);
 
 	if(!isZero(b)) return -1;
 
-	if(getSign(a)==1){
-		if(getSign(b)==1){
+	if(asign==1){
+		if(bsign==1){
 			copyNumber(a,&abuf);
 
 			while(1){
@@ -317,20 +319,20 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 			}
 			copyNumber(&abuf,remainder);
 		}
-		if(getSign(b)==-1){
+		if(bsign==-1){
 			getAbs(b,&babs);
 			divide(a,&babs,quotient,remainder);
 			setSign(quotient,-1);
 		}
 	}
-	if(getSign(a)==-1){
-		if(getSign(b)==1){
+	if(asign==-1){
+		if(bsign==1){
 			getAbs(a,&aabs);
 			divide(&aabs,b,quotient,remainder);
 			setSign(quotient,-1);
 			setSign(remainder,-1);
 		}
-		if(getSign(b)==-1){
+		if(bsign==-1){
 			getAbs(a,&aabs);
 			getAbs(b,&babs);
 			divide(&aabs,&babs,quotient,remainder);
@@ -343,14 +345,14 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 
 int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *remainder){
 	int rembuf=0,t,babs;
-	int i;
+	int i,asign=getSign(a);
 	struct NUMBER aabs;
 
 	if(b==0||b>9) return -1;
 
 	clearByZero(&aabs);
 
-	if(getSign(a)==1){
+	if(asign==1){
 		if(b>0){
 			for(i=KETA-1;i>=0;i--){
 				t=10*rembuf+a->n[i];
@@ -366,7 +368,7 @@ int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *r
 			setSign(quotient,-1);
 		}
 	}
-	if(getSign(a)==-1){
+	if(asign==-1){
 		if(b>0){
 			getAbs(a,&aabs);
 			int_divide(&aabs,b,quotient,remainder);
