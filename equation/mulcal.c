@@ -191,30 +191,10 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 	
 	clearByZero(sum);
 
-	if(getSign(a)==1){
-		if(getSign(b)==1){
-			for(i=0;i<KETA;i++){
-				buf=a->n[i]+b->n[i]+carry;
-				sum->n[i]=buf%10;
-				carry=buf/10;
-			}
-		}
-		if(getSign(b)==-1){
-			getAbs(b,&Babs);
-			ret=sub(a,&Babs,sum);
-		}
-	}
-	if(getSign(a)==-1){
-		if(getSign(b)==1){
-			getAbs(a,&Aabs);
-			ret=sub(b,&Aabs,sum);
-		}
-		if(getSign(b)==-1){
-			getAbs(a,&Aabs);
-			getAbs(b,&Babs);
-			ret=add(&Aabs,&Babs,sum);
-			setSign(sum,-1);
-		}
+    for(i=0;i<KETA;i++){
+		buf=a->n[i]+b->n[i]+carry;
+		sum->n[i]=buf%10;
+		carry=buf/10;
 	}
 
 	if(carry){
@@ -232,39 +212,20 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 
 	clearByZero(diff);
 
-	if(getSign(a)==1){
-		if(getSign(b)==1){
-			if(numComp(a,b)>=0){
-				for(i=0;i<KETA;i++){
-					if(a->n[i]-borrow<b->n[i]){
-						buf=10+a->n[i]-borrow-b->n[i];
-						borrow=1;
-					}else{
-						buf=a->n[i]-borrow-b->n[i];
-						borrow=0;
-					}
-					diff->n[i]=buf;
-				}
+    if(numComp(a,b)>=0){
+		for(i=0;i<KETA;i++){
+			if(a->n[i]-borrow<b->n[i]){
+				buf=10+a->n[i]-borrow-b->n[i];
+				borrow=1;
 			}else{
-				ret=sub(b,a,diff);
-				setSign(diff,-1);
+				buf=a->n[i]-borrow-b->n[i];
+				borrow=0;
 			}
+			diff->n[i]=buf;
 		}
-		if(getSign(b)==-1){
-			getAbs(b,&Babs);
-			ret=add(a,&Babs,diff);
-		}
-	}
-	if(getSign(a)==-1){
-		if(getSign(b)==1){
-			getAbs(a,&Aabs);
-			ret=add(&Aabs,b,diff);
-			setSign(diff,-1);
-		}
-		if(getSign(b)==-1){
-			getAbs(b,&Babs);
-			ret=add(a,&Babs,diff);
-		}
+	}else{
+		ret=sub(b,a,diff);
+		setSign(diff,-1);
 	}
 
 	if(borrow){
@@ -276,112 +237,63 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder){
 	struct NUMBER buf,abuf,bbuf,aabs,babs,e;
-	int asign=getSign(a);
-	int bsign=getSign(b);
 
 	clearByZero(quotient);
 	clearByZero(remainder);
 
 	if(!isZero(b)) return -1;
 
-	if(asign==1){
-		if(bsign==1){
-			copyNumber(a,&abuf);
+    copyNumber(a,&abuf);
 
-			while(1){
-				if(numComp(&abuf,b)==-1) break;
-				copyNumber(b,&bbuf);
-				clearByZero(&e);
-				setInt(&e,1);
-
-				while(1){
-					if(numComp(&abuf,&bbuf)!=1) break;
-					mulBy10(&bbuf,&buf);
-					copyNumber(&buf,&bbuf);
-					mulBy10(&e,&buf);
-					copyNumber(&buf,&e);
-				}
-
-				if(numComp(b,&bbuf)==-1){
-					clearByZero(&buf);
-					divBy10(&bbuf,&buf);
-					copyNumber(&buf,&bbuf);
-					clearByZero(&buf);
-					divBy10(&e,&buf);
-					copyNumber(&buf,&e);
-				}
-
-				sub(&abuf,&bbuf,&buf);
-				copyNumber(&buf,&abuf);
-
-				add(quotient,&e,&buf);
-				copyNumber(&buf,quotient);
-			}
-			copyNumber(&abuf,remainder);
+    while(1){
+		if(numComp(&abuf,b)==-1) break;
+	    copyNumber(b,&bbuf);
+		clearByZero(&e);
+		setInt(&e,1);
+		while(1){
+			if(numComp(&abuf,&bbuf)!=1) break;
+			mulBy10(&bbuf,&buf);
+			copyNumber(&buf,&bbuf);
+			mulBy10(&e,&buf);
+			copyNumber(&buf,&e);
 		}
-		if(bsign==-1){
-			getAbs(b,&babs);
-			divide(a,&babs,quotient,remainder);
-			setSign(quotient,-1);
+
+		if(numComp(b,&bbuf)==-1){
+			clearByZero(&buf);
+			divBy10(&bbuf,&buf);
+			copyNumber(&buf,&bbuf);
+			clearByZero(&buf);
+			divBy10(&e,&buf);
+			copyNumber(&buf,&e);
 		}
+
+		sub(&abuf,&bbuf,&buf);
+		copyNumber(&buf,&abuf);
+
+		add(quotient,&e,&buf);
+		copyNumber(&buf,quotient);
 	}
-	if(asign==-1){
-		if(bsign==1){
-			getAbs(a,&aabs);
-			divide(&aabs,b,quotient,remainder);
-			setSign(quotient,-1);
-			setSign(remainder,-1);
-		}
-		if(bsign==-1){
-			getAbs(a,&aabs);
-			getAbs(b,&babs);
-			divide(&aabs,&babs,quotient,remainder);
-			setSign(remainder,-1);
-		}
-	}
+	copyNumber(&abuf,remainder);
 
     return 0;
 }
 
 int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *remainder){
 	int rembuf=0,t,babs;
-	int i,asign=getSign(a);
+	int i;
 	struct NUMBER aabs;
 
 	if(b==0||b>9) return -1;
 
 	clearByZero(&aabs);
 
-	if(asign==1){
-		if(b>0){
-			for(i=KETA-1;i>=0;i--){
-				t=10*rembuf+a->n[i];
-				rembuf=t%b;
-				quotient->n[i]=(t-rembuf)/b;
-			}
+    for(i=KETA-1;i>=0;i--){
+		t=10*rembuf+a->n[i];
+		rembuf=t%b;
+		quotient->n[i]=(t-rembuf)/b;
+	}
 
-			*remainder=rembuf;
-		}
-		if(b<0){
-			babs=b*-1;
-			int_divide(a,babs,quotient,remainder);
-			setSign(quotient,-1);
-		}
-	}
-	if(asign==-1){
-		if(b>0){
-			getAbs(a,&aabs);
-			int_divide(&aabs,b,quotient,remainder);
-			setSign(quotient,-1);
-			*remainder*=-1;
-		}
-		if(b<0){
-			getAbs(a,&aabs);
-			babs=b*-1;
-			int_divide(&aabs,babs,quotient,remainder);
-			*remainder*=-1;
-		}
-	}
+	*remainder=rembuf;
 
 	return 0;
 }
