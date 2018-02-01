@@ -190,11 +190,21 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 	int i;
 	int carry=0,buf;
 	int ret=0;
-	struct NUMBER Aabs,Babs;
+	int aketa,bketa;
+	int bigger;
 	
 	clearByZero(sum);
 
-    for(i=0;i<KETA;i++){
+	aketa=getKeta(a);
+	bketa=getKeta(a);
+
+	if(aketa>=bketa){
+		bigger=aketa+1;
+	}else{
+		bigger=bketa+1;
+	}
+
+	for(i=0;i<bigger;i++){
 		buf=a->n[i]+b->n[i]+carry;
 		sum->n[i]=buf%10;
 		carry=buf/10;
@@ -209,7 +219,7 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 
 int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 	int i;
-	int borrow=0,buf;
+	int borrow=0;
 	int ret=0;
 	struct NUMBER Aabs,Babs;
 
@@ -218,13 +228,12 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
     if(numComp(a,b)>=0){
 		for(i=0;i<KETA;i++){
 			if(a->n[i]-borrow<b->n[i]){
-				buf=10+a->n[i]-borrow-b->n[i];
+				diff->n[i]=10+a->n[i]-borrow-b->n[i];
 				borrow=1;
 			}else{
-				buf=a->n[i]-borrow-b->n[i];
+				diff->n[i]=a->n[i]-borrow-b->n[i];
 				borrow=0;
 			}
-			diff->n[i]=buf;
 		}
 	}else{
 		ret=sub(b,a,diff);
@@ -282,13 +291,10 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 }
 
 int int_divide(const struct NUMBER *a,const int b,struct NUMBER *quotient,int *remainder){
-	int rembuf=0,t,babs;
+	int rembuf=0,t;
 	int i;
-	struct NUMBER aabs;
 
 	if(b==0||b>9) return -1;
-
-	clearByZero(&aabs);
 
     for(i=KETA-1;i>=0;i--){
 		t=10*rembuf+a->n[i];
@@ -366,6 +372,14 @@ int mulBy10n(const struct NUMBER *a,int index,struct NUMBER *b){
 	}
 
 	setSign(b,getSign(a));
+
+	return ret;
+}
+
+int getKeta(const struct NUMBER *a){
+	ret = KETA-1;
+
+	while(ret>=0&&a->[ret]==0) ret--;
 
 	return ret;
 }

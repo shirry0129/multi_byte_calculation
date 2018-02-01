@@ -70,3 +70,6 @@ int sqrt_newton(const struct NUMBER *a,struct NUMBER *b);
 
 //*10^n
 int mulBy10n(const struct NUMBER *a,int n,struct NUMBER *b);
+
+//桁の取得
+int getKeta(const struct NUMBER *a);
