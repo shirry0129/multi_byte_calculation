@@ -81,6 +81,7 @@ int mulBy10(const struct NUMBER *a,struct NUMBER *b){
 int divBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret;
 	int i;
+    //int getSign(a)=getSign(a);
 
 	if(getSign(a)==1){
 		ret=a->n[0];
@@ -148,17 +149,17 @@ int getSign(const struct NUMBER *a){
 
 int numComp(const struct NUMBER *a,const struct NUMBER *b){
 	int i;
-    int asign=getSign(a);
-    int bsign=getSign(b);
+    // int getSign(a)=getSign(a);
+    // int getSign(b)=getSign(b);
 
-	if(asign>bsign){
+	if(getSign(a)>getSign(b)){
 		return 1;
 	}
-	if(asign<bsign){
+	if(getSign(a)<getSign(b)){
 		return -1;
 	}
 
-	if(asign==1&&bsign==1){
+	if(getSign(a)==1&&getSign(b)==1){
 		for(i=KETA-1;i>=0;i--){
 			if(a->n[i]>b->n[i]){
 				return 1;
@@ -171,7 +172,7 @@ int numComp(const struct NUMBER *a,const struct NUMBER *b){
 		return 0;
 	}
 
-	if(asign==-1&&bsign==-1){
+	if(getSign(a)==-1&&getSign(b)==-1){
 		for(i=KETA-1;i>=0;i--){
 			if(a->n[i]>b->n[i]){
 				return -1;
