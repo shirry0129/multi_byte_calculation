@@ -22,11 +22,11 @@ int main(){
 
 	srandom(time(NULL));
 
-	// setInt(&a,1373488);
-	// setInt(&b,8);
+	// setInt(&a,6499525);
+	// setInt(&b,3269407);
 	// divide(&a,&b,&c,&d);
 
-	// printf("%d\n",1373488/8);
+	// printf("%d\n",6499525/3269407);
 	// dispNumberZeroSuppress(&c);
 
 	// for(i=0;i<10e3;i++){
@@ -34,7 +34,7 @@ int main(){
 	// 	clearByZero(&d);
 
 	// 	x=random()%10000000;
-	// 	y=random()%10+1;
+	// 	y=random()%10000000+1;
 	// 	setInt(&a,x);
 	// 	setInt(&b,y);
 	// 	r=divide(&a,&b,&c,&d);
@@ -63,7 +63,7 @@ int main(){
 	int_divide(&sum,2,&d,&x);
 
 	printf("phi = ");
-	dispNumberZeroSuppress(&one);
+	dispNumberZeroSuppress(&d);
 	putchar('\n');
 
 	gettimeofday(&tv,NULL);

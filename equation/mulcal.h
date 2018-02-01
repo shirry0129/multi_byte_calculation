@@ -1,4 +1,4 @@
-#define KETA 202
+#define KETA 2002
 
 struct NUMBER
 {

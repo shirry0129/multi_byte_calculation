@@ -277,6 +277,9 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 		diff=aketa-bketa;
 
 		for(i=bketa-1;i>=0;i--){
+			if(b->n[i]<abuf.n[i+diff]){
+				break;
+			}
 			if(b->n[i]>abuf.n[i+diff]){
 				diff--;
 				break;
@@ -284,31 +287,13 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 		}
 
 		if(numComp(&abuf,b)==-1) break;
-		//copyNumber(b,&bbuf);
 		clearByZero(&e);
 		setInt(&e,1);
 
 		mulBy10n(b,diff,&bbuf);
-		//copyNumber(&buf,&bbuf);
 		mulBy10n(&e,diff,&buf);
 		copyNumber(&buf,&e);
-		// while(1){
-		// 	if(numComp(&abuf,&bbuf)!=1) break;
-		// 	mulBy10(&bbuf,&buf);
-		// 	copyNumber(&buf,&bbuf);
-		// 	mulBy10(&e,&buf);c
-		// 	copyNumber(&buf,&e);
-		// }
-
-		// if(numComp(b,&bbuf)==-1){
-		// 	clearByZero(&buf);
-		// 	divBy10(&bbuf,&buf);
-		// 	copyNumber(&buf,&bbuf);
-		// 	clearByZero(&buf);
-		// 	divBy10(&e,&buf);
-		// 	copyNumber(&buf,&e);
-		// }
-
+		
 		sub(&abuf,&bbuf,&buf);
 		copyNumber(&buf,&abuf);
 
