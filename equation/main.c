@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include<sys/time.h>
 #include"mulcal.h"
+#include<stdlib.h>
+#include<time.h>
 
 int main(){
 	struct NUMBER a,b,c,d,e,one,sum;
-	int x;
+	int x,y,z,r,i;
 	struct timeval tv;
 	double tstart,tend;
 
@@ -18,6 +20,40 @@ int main(){
 	clearByZero(&e);
 	clearByZero(&one);
 
+	srandom(time(NULL));
+
+	// setInt(&a,1373488);
+	// setInt(&b,8);
+	// divide(&a,&b,&c,&d);
+
+	// printf("%d\n",1373488/8);
+	// dispNumberZeroSuppress(&c);
+
+	// for(i=0;i<10e3;i++){
+	// 	clearByZero(&c);
+	// 	clearByZero(&d);
+
+	// 	x=random()%10000000;
+	// 	y=random()%10+1;
+	// 	setInt(&a,x);
+	// 	setInt(&b,y);
+	// 	r=divide(&a,&b,&c,&d);
+	// 	getInt(&c,&z);
+
+	// 	if(!r){
+	// 		if(x/y!=z){
+	// 			printf("mismatched. %d\n",i);
+	// 			printf("x = %d,y = %d,x / y =%d\n",x,y,x/y);
+	// 			printf("a = ");
+	// 			dispNumberZeroSuppress(&a);
+	// 			printf("\nb = ");
+	// 			dispNumberZeroSuppress(&b);
+	// 			printf("\na / b =");
+	// 			dispNumberZeroSuppress(&c);
+	// 		}
+	// 	}
+	// }
+
 	setInt(&a,5);
 	setInt(&e,1);
 	mulBy10n(&a,KETA-2,&b);
@@ -27,7 +63,7 @@ int main(){
 	int_divide(&sum,2,&d,&x);
 
 	printf("phi = ");
-	dispNumberZeroSuppress(&d);
+	dispNumberZeroSuppress(&one);
 	putchar('\n');
 
 	gettimeofday(&tv,NULL);

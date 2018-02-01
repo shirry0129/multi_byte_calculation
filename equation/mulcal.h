@@ -1,4 +1,4 @@
-#define KETA 2002
+#define KETA 202
 
 struct NUMBER
 {
@@ -73,3 +73,6 @@ int mulBy10n(const struct NUMBER *a,int n,struct NUMBER *b);
 
 //桁の取得
 int getKeta(const struct NUMBER *a);
+
+//int型変数の取得
+int getInt(const struct NUMBER *a,int *x);

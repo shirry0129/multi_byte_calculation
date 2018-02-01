@@ -196,7 +196,7 @@ int add(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *sum){
 	clearByZero(sum);
 
 	aketa=getKeta(a);
-	bketa=getKeta(a);
+	bketa=getKeta(b);
 
 	if(aketa>=bketa){
 		bigger=aketa+1;
@@ -229,9 +229,9 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 	bketa=getKeta(b);
 
 	if(aketa>=bketa){
-		bigger=aketa;
+		bigger=aketa+1;
 	}else{
-		bigger=bketa;
+		bigger=bketa+1;
 	}
 
     if(numComp(a,b)>=0){
@@ -258,35 +258,56 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 
 int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient,struct NUMBER *remainder){
 	struct NUMBER buf,abuf,bbuf,aabs,babs,e;
+	int aketa,bketa,diff,i;
 
 	clearByZero(quotient);
 	clearByZero(remainder);
 
 	if(!isZero(b)) return -1;
 
-    copyNumber(a,&abuf);
+	copyNumber(a,&abuf);
 
-    while(1){
+	bketa=getKeta(b);
+
+	while(1){
+		aketa=getKeta(&abuf);
+
+		if(aketa<bketa) break;
+
+		diff=aketa-bketa;
+
+		for(i=bketa-1;i>=0;i--){
+			if(b->n[i]>abuf.n[i+diff]){
+				diff--;
+				break;
+			}
+		}
+
 		if(numComp(&abuf,b)==-1) break;
-	    copyNumber(b,&bbuf);
+		//copyNumber(b,&bbuf);
 		clearByZero(&e);
 		setInt(&e,1);
-		while(1){
-			if(numComp(&abuf,&bbuf)!=1) break;
-			mulBy10(&bbuf,&buf);
-			copyNumber(&buf,&bbuf);
-			mulBy10(&e,&buf);
-			copyNumber(&buf,&e);
-		}
 
-		if(numComp(b,&bbuf)==-1){
-			clearByZero(&buf);
-			divBy10(&bbuf,&buf);
-			copyNumber(&buf,&bbuf);
-			clearByZero(&buf);
-			divBy10(&e,&buf);
-			copyNumber(&buf,&e);
-		}
+		mulBy10n(b,diff,&bbuf);
+		//copyNumber(&buf,&bbuf);
+		mulBy10n(&e,diff,&buf);
+		copyNumber(&buf,&e);
+		// while(1){
+		// 	if(numComp(&abuf,&bbuf)!=1) break;
+		// 	mulBy10(&bbuf,&buf);
+		// 	copyNumber(&buf,&bbuf);
+		// 	mulBy10(&e,&buf);c
+		// 	copyNumber(&buf,&e);
+		// }
+
+		// if(numComp(b,&bbuf)==-1){
+		// 	clearByZero(&buf);
+		// 	divBy10(&bbuf,&buf);
+		// 	copyNumber(&buf,&bbuf);
+		// 	clearByZero(&buf);
+		// 	divBy10(&e,&buf);
+		// 	copyNumber(&buf,&e);
+		// }
 
 		sub(&abuf,&bbuf,&buf);
 		copyNumber(&buf,&abuf);
@@ -386,9 +407,41 @@ int mulBy10n(const struct NUMBER *a,int index,struct NUMBER *b){
 }
 
 int getKeta(const struct NUMBER *a){
-	ret = KETA-1;
+	int ret = KETA;
 
-	while(ret>=0&&a->[ret]==0) ret--;
+	while(ret>0&&a->n[ret-1]==0) ret--;
 
 	return ret;
+}
+
+int getInt(const struct NUMBER *a,int *x){
+	int digits_decide=1;
+	int i;
+	int limit=10;
+	struct NUMBER int_max,int_min;
+
+	setInt(&int_max,INT_MAX);
+	setInt(&int_min,INT_MIN);
+
+	if(numComp(a,&int_max)==1||numComp(a,&int_min)==-1){
+		*x=0;
+		return -1;
+	}
+
+	if(KETA<10){
+		limit=KETA;
+	}
+
+	*x=0;
+
+	for(i=0;i<limit;i++){
+		*x+=a->n[i]*digits_decide;
+		digits_decide*=10;
+	}
+
+	if(a->sign==-1){
+		(*x)*=-1;
+	}
+
+	return 0;
 }
