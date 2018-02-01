@@ -221,12 +221,21 @@ int sub(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *diff){
 	int i;
 	int borrow=0;
 	int ret=0;
-	struct NUMBER Aabs,Babs;
+	int aketa,bketa,bigger;
 
 	clearByZero(diff);
 
+	aketa=getKeta(a);
+	bketa=getKeta(b);
+
+	if(aketa>=bketa){
+		bigger=aketa;
+	}else{
+		bigger=bketa;
+	}
+
     if(numComp(a,b)>=0){
-		for(i=0;i<KETA;i++){
+		for(i=0;i<bigger;i++){
 			if(a->n[i]-borrow<b->n[i]){
 				diff->n[i]=10+a->n[i]-borrow-b->n[i];
 				borrow=1;
