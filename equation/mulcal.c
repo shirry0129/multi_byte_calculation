@@ -288,7 +288,7 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 
 		if(numComp(&abuf,b)==-1) break;
 		clearByZero(&e);
-		setInt(&e,1);
+		setInt(&e,1);nana
 
 		mulBy10n(b,diff,&bbuf);
 		mulBy10n(&e,diff,&buf);
