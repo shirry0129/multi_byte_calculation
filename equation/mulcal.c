@@ -148,15 +148,17 @@ int getSign(const struct NUMBER *a){
 
 int numComp(const struct NUMBER *a,const struct NUMBER *b){
 	int i;
+    int asign=getSign(a);
+    int bsign=getSign(b);
 
-	if(getSign(a)>getSign(b)){
+	if(asign>bsign){
 		return 1;
 	}
-	if(getSign(a)<getSign(b)){
+	if(asign<bsign){
 		return -1;
 	}
 
-	if(getSign(a)==1&&getSign(b)==1){
+	if(asign==1&&bsign==1){
 		for(i=KETA-1;i>=0;i--){
 			if(a->n[i]>b->n[i]){
 				return 1;
@@ -169,7 +171,7 @@ int numComp(const struct NUMBER *a,const struct NUMBER *b){
 		return 0;
 	}
 
-	if(getSign(a)==-1&&getSign(b)==-1){
+	if(asign==-1&&bsign==-1){
 		for(i=KETA-1;i>=0;i--){
 			if(a->n[i]>b->n[i]){
 				return -1;
