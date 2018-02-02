@@ -81,7 +81,6 @@ int mulBy10(const struct NUMBER *a,struct NUMBER *b){
 int divBy10(const struct NUMBER *a,struct NUMBER *b){
 	int ret;
 	int i;
-    //int getSign(a)=getSign(a);
 
 	if(getSign(a)==1){
 		ret=a->n[0];
@@ -149,8 +148,6 @@ int getSign(const struct NUMBER *a){
 
 int numComp(const struct NUMBER *a,const struct NUMBER *b){
 	int i;
-    // int getSign(a)=getSign(a);
-    // int getSign(b)=getSign(b);
 
 	if(getSign(a)>getSign(b)){
 		return 1;
@@ -288,7 +285,7 @@ int divide(const struct NUMBER *a,const struct NUMBER *b,struct NUMBER *quotient
 
 		if(numComp(&abuf,b)==-1) break;
 		clearByZero(&e);
-		setInt(&e,1);nana
+		setInt(&e,1);
 
 		mulBy10n(b,diff,&bbuf);
 		mulBy10n(&e,diff,&buf);
