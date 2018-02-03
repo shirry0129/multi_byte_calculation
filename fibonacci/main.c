@@ -40,7 +40,7 @@ int main(){
 	printf("f2 = ");
 	dispNumberZeroSuppress(&f2);
 	putchar('\n');
-	printf("phi = ");
+	printf("phi = ");ru
 	dispNumberZeroSuppress(&quo);
 	putchar('\n');
 	printf("count = %d\n",count);
